@@ -4,13 +4,15 @@
 # ansible_ssh_private_key_file -- SSH Key
 # testserver   ansible_ssh_host=129.114.108.187   ansible_ssh_user=cc ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/max_tacc.pem
 testserver   ansible_ssh_host=129.114.108.187
-ubuntu_utah ansible_ssh_host=pcvm2-13.utah.geniracks.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_geni_ssh_rsa
-ubuntu_cenic ansible_ssh_host=pcvm2-28.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_geni_ssh_rsa
+utah ansible_ssh_host=pcvm2-13.utah.geniracks.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_geni_ssh_rsa
+cenic_master ansible_ssh_host=pcvm3-42.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_geni_ssh_rsa
+cenic_slave ansible_ssh_host=pcvm2-7.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_geni_ssh_rsa
 
 [geni]
-ubuntu_utah
-ubuntu_cenic
+utah
+cenic_master
+cenic_slave
 
 [webservers]
-#ubuntu_cenic
-ubuntu_utah
+#cenic
+utah

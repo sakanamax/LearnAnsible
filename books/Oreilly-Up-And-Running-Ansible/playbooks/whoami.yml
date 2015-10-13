@@ -1,0 +1,12 @@
+# Chapter 4 Registering Variables
+- name: show return value of command module
+  hosts: testserver
+  tasks:
+    - name: capture output of id command
+      command: id -un
+# register 後面的名稱可以自訂
+      register: login
+# - debug 後面的 var 不可以自訂, 觀察變數的相關資訊,
+    - debug: var=login
+# 如果是用 msg= 就是傳送訊息
+    - debug: msg="login user name is {{ login.stdout }}"

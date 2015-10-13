@@ -1,0 +1,10 @@
+# Chapter 4 Registering Variables
+- name: Ignoring when a module returns an error
+  hosts: testserver
+  tasks:
+    - name: Run myprog
+      command: /opt/myprog
+      register: result
+# 如果有加上 ignore_errors: True 就算發生錯誤也會繼續下去
+      ignore_errors: True
+    - debug: var=result

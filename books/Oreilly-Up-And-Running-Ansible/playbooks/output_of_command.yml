@@ -1,0 +1,10 @@
+# Chapter 4 Registering Variables
+- name: show return value of command module
+  hosts: testserver
+  tasks:
+    - name: capture output of id command
+      command: id -un
+      register: login
+# 使用 變數 {{ xxx.stdout }} 將輸入導到螢幕前
+# - debug 後面的 msg 也是有規定名稱, 不能用自定命名
+    - debug: msg="Logged in as user {{ login.stdout }}"
