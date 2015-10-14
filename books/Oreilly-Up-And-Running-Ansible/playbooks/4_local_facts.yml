@@ -1,0 +1,17 @@
+# Chapter 4 Facts Local Facts
+- name: Test local facts
+  hosts: all
+  tasks:
+  - name: print ansible_local
+# 顯示所有的 local facts, 變數名稱為 ansible_local
+    debug: var=ansible_local
+  - name: print book title
+# 透過變數去顯示 book title, 因為在Remote host 命名為 example.facts
+# 所以 ansible_local.example.book.title 就是 example名稱底下 book 底下的 title
+    debug: msg="The title of the book is {{ ansible_local.example.book.title }}"
+# 附上 Remote host 的/etc/ansible/facts.d/example.fact 內容
+# [book]
+# title=Ansible: Up and Running
+# author=Lorin Hochstein
+# publisher=O'Reilly Media
+

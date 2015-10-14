@@ -1,0 +1,8 @@
+# Chapter 4 Setting Variables on the Command Line
+- name: pass a message on the command line
+  hosts: localhost
+  vars:
+# 如果沒有使用 ansible-playbook *.yml -e greeting=xxx 就使用下面的value
+    greeting: "you didn't specify a message"
+  tasks:
+    - debug: msg="{{ greeting }}"

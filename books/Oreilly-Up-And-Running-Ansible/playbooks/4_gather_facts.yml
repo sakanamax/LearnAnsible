@@ -1,0 +1,8 @@
+# Chapter 4 Facts
+- name: print out operation system
+  hosts: all
+# 好像預設沒有 gather_facts: True 也會去抓訊息
+# 但是如果設定 gather_facts: False 就會不去抓主機的訊息
+  gather_facts: True
+  tasks:
+    - debug: var=ansible_distribution

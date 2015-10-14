@@ -1,0 +1,12 @@
+# Chapter 4 Using set_fact to Define a New Variable
+- name: show return value of command module and use set_fact
+  hosts: testserver
+  tasks:
+    - name: capture output of id command
+      command: id -un
+      register: login
+# 這邊利用 set_fact 定義一個新的變數 login2 等於 login.stdout
+# set_fact 方便於 register 後面產生新的變數來使用
+    - set_fact: login2={{ login.stdout }}
+# - debug 後面的 msg 也是有規定名稱, 不能用自定命名
+    - debug: msg="Logged in as user {{ login2 }}"

@@ -1,0 +1,16 @@
+# Chapter 4 Built-in Variables
+- name: show Built-in Variables
+  hosts: all
+  tasks:
+# 顯示 hostvars,  資訊太多, 所以沒有顯示
+#    - debug: var=hostvars
+# 顯示 inventory_hostname 
+    - debug: var=inventory_hostname
+# 顯示 group_names 所屬的 group 
+    - debug: var=group_names
+# 顯示 groups 顯示所有group以及成員
+    - debug: var=groups
+# 顯示 play_hosts 顯示所有hosts
+    - debug: var=play_hosts
+# 顯示 ansible_version
+    - debug: var=ansible_version
