@@ -1,0 +1,34 @@
+# Chapter 6 Using Iteration (with_item) to install Multiple Packages
+- name: psing Iteration (with_item) to install multiple packages
+  hosts: utah_slave
+#  sudo: True 這邊學到 sudo 不一定要放在一般選項內, 也可以放在 task 內
+
+  tasks:
+    - name: install python-pip
+# 於 apt moudule 使用 sudo
+      sudo: True
+# 安裝 python-pip 套件
+      apt: name=python-pip update_cache=yes cache_valid_time=3600
+
+# 顯示目前 pip 裡面有的相關 python 套件
+    - name: show pip packages wit pip freeze
+      shell: pip freeze
+      register: pip
+    - debug: var=pip.stdout_lines
+
+# 使用 copy module 將範本使用 pip freeze 建立出來的 requirements.txt 複製到遠端
+    - name: copy requirements.txt file
+      sudo: True
+      copy: src=files/requirements.txt dest=~/requirements.txt
+
+    - name: pip install with requirements.txt
+# 於 pip moudule 使用 sudo
+      sudo: True
+      pip: requirements=~/requirements.txt
+
+# 顯示目前 pip 裡面有的相關 python 套件
+    - name: show pip packages wit pip freeze
+      shell: pip freeze
+      register: pip
+    - debug: var=pip.stdout_lines
+
