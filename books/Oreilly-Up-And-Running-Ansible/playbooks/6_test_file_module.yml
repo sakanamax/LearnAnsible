@@ -1,0 +1,54 @@
+# Chapter 6 Enabling the Nginx Configuration
+- name: use file module to create file / directory and change permission
+  hosts: utah_master
+
+  tasks:
+# 使用 file moudule 建立檔案
+    - name: use file module to create empty file
+# file moudle 如果檔案不存在無法執行
+# 使用 如果要建立檔案一定要使用 state=touch
+      file: path=~/test.txt state=touch
+
+# 使用 ls 指令來觀察檔案內容
+    - name: ls  ~
+      shell: ls -lR  ~
+      register: cat
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat.stdout_lines
+
+# 改變檔案的權限 一定要用完整的權限表示方式 四碼
+    - name: change file permission to 0777
+      file: path=~/test.txt mode=0777
+
+# 使用 ls 指令來觀察檔案內容
+    - name: ls  ~
+      shell: ls -lR  ~
+      register: cat
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat.stdout_lines
+
+# 利用 file module 建立資料夾
+    - name: create directory at ~
+      file: path=~/abc state=directory
+
+# 使用 ls 指令來觀察檔案內容
+    - name: ls  ~
+      shell: ls -lR  ~
+      register: cat
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat.stdout_lines
+
+# 利用 file module 刪除檔案
+    - name: delete ~/test.txt
+      file: path=~/test.txt state=absent
+
+# 使用 ls 指令來觀察檔案內容
+    - name: ls  ~
+      shell: ls -lR  ~
+      register: cat
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat.stdout_lines

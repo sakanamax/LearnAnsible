@@ -1,0 +1,44 @@
+# Chapter 6 Running Custom Python Scripts in the Context of the Application
+- name: use script module to copy and execute script on the remote host
+  hosts: utah_master
+
+  tasks:
+# 使用 script moudule 複製與執行 script
+    - name: copy and execute ls.sh to remote host
+# script moudle 可以在 script 後面放 argument
+      script: scripts/ls.sh test test2
+
+# 使用 cat 指令來觀察檔案內容
+    - name: cat ~/ls.txt
+      shell: cat ~/ls.txt
+      register: cat
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat.stdout_lines
+
+    - name: test script module with creates option
+# script moudle 後面如果加上 creates=檔案路徑, 檔案存在就不執行
+      script: scripts/ls.sh test test2 creates=~/ls.txt
+
+    - name: test script module with removes option
+# script moudle 後面如果加上 removes=檔案路徑, 檔案不存在就不執行, 也就是檔案存在才執行
+      script: scripts/ls.sh test test2 removes=~/ls.txt
+
+# 使用 cat 指令來觀察檔案內容
+    - name: cat ~/ls.txt
+      shell: cat ~/ls.txt
+      register: cat2
+
+# 觀察 ls.txt 的輸出
+    - debug: var=cat2.stdout_lines
+
+# script/ls.sh 的內容如下
+
+##!/bin/bash
+#ls /boot >> ~/ls.txt
+#
+#echo "-----------" >> ~/ls.txt
+#echo "\$0 is $0"   >> ~/ls.txt
+#echo "\$1 is $1"   >> ~/ls.txt
+#echo "\$2 is $2"   >> ~/ls.txt
+#echo "-----------" >> ~/ls.txt
