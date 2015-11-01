@@ -1,0 +1,34 @@
+# Chapter 6 Installing Twitter Cron Job
+- name: use cron module to add or delete cron job
+  hosts: utah_master
+
+  tasks:
+# 使用 cron moudule 建立 cron job
+    - name: use cron module to add cron job
+# 預設的使用者為 root 所以記得要 sudo
+      sudo: True
+      cron: name="check /tmp" minute="0" hour="*/2" job="ls -l /tmp > /tmp/ls.txt" 
+
+# 使用 crontab -l 指令來觀察內容
+    - name: crontab -l
+      sudo: True
+      shell: crontab -l
+      register: crontab
+
+# 觀察輸出
+    - debug: var=crontab.stdout_lines
+
+# 使用 cron moudule 刪除 cron job
+# 會去比對名稱 #Ansible: check /tmp
+    - name: use cron module to delete cron task
+      sudo: True
+      cron: name="check /tmp" state=absent 
+
+# 使用 crontab -l 指令來觀察內容
+    - name: crontab -l
+      sudo: True
+      shell: crontab -l
+      register: crontab
+
+# 觀察輸出
+    - debug: var=crontab.stdout_lines

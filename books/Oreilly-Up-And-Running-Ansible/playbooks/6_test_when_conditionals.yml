@@ -1,0 +1,58 @@
+# Chapter 6 Install TLS Certificates
+- name: use when conditionals and setup module (facts) 
+  hosts: all
+
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution 
+
+# 這個實驗根據 fact 所傳回的 OS 執行不同的套件安裝指令, 透過 when 條件來實作
+# 使用 when 條件, 當OS 為 CentOS 使用 rpm 指令查詢
+    - name: check telnet-server package with CentOS
+      shell: rpm -qa | grep telnet
+      when: ansible_distribution == "CentOS"
+      register: rpm
+
+# 觀察輸出
+    - debug: var=rpm.stdout_lines
+
+# 使用 when 條件, 當OS 為 Ubuntu 使用 dpkg 指令查詢
+    - name: check telnetd package with Ubuntu
+      shell: dpkg -l | grep telnet
+      when: ansible_distribution == "Ubuntu"
+      register: dpkg
+
+# 觀察輸出
+    - debug: var=dpkg.stdout_lines
+
+# 安裝 telnet-server 套件, 如果是 CentOS
+    - name: Install telnet-server when CentOS
+      sudo: True
+      yum: name=telnet-server
+      when: ansible_distribution == "CentOS"
+
+# 安裝 telnetd 套件, 如果是 Ubuntu
+    - name: Install telnetd when Ubuntu
+      sudo: True
+      apt: name=telnetd update_cache=yes
+      when: ansible_distribution == "Ubuntu"
+
+# 使用 when 條件, 當OS 為 CentOS 使用 rpm 指令查詢
+    - name: check telnet-server package with CentOS
+      shell: rpm -qa | grep telnet
+      when: ansible_distribution == "CentOS"
+      register: rpm
+
+# 觀察輸出
+    - debug: var=rpm.stdout_lines
+
+# 使用 when 條件, 當OS 為 Ubuntu 使用 dpkg 指令查詢
+    - name: check telnetd package with Ubuntu
+      shell: dpkg -l | grep telnet
+      when: ansible_distribution == "Ubuntu"
+      register: dpkg
+
+# 觀察輸出
+    - debug: var=dpkg.stdout_lines
