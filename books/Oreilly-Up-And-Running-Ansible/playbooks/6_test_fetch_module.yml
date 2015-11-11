@@ -1,0 +1,19 @@
+# Chapter 6 
+- name: use fetch module to copy remote file to local
+  hosts: utah_master
+
+  tasks:
+# 使用 fetch moudule 複製遠端檔案到 files
+    - name: use fetch module to fetch a file from remote  to local /tmp
+# 如果只有指定 dest 路徑, 主機名稱為 utah_master
+# 檔案就會複製到 dest路徑/utah_master/users/maxhuang/test20151111.txt
+      fetch: src=/users/maxhuang/test20151111.txt dest=/tmp
+
+    - name: use fetch module with flat to fetch a file from remote  to local /tmp
+# 使用 flat=yes, 就不會加上主機名稱以及絕對路徑, 如果 dest 路徑為檔案名稱就直接複製過去
+      fetch: src=/users/maxhuang/test20151111.txt  dest=/tmp/test20151111.txt flat=yes
+
+    - name: use fetch module with flat to fetch a file from remote  to local folder /tmp/maxhuang
+# 如果使用 flat=yes, dest路徑為 / 結尾, 就是路徑是目錄, 檔案會直接複製到該目錄下
+# 如果目錄不存在也會自動建立
+      fetch: src=/users/maxhuang/test20151111.txt  dest=/tmp/maxhuang/  flat=yes
