@@ -1,0 +1,29 @@
+# Chapter 7 Running on One Host at a Time
+# 使用 serial 來限制Ansinble 每一個工作執行的主機數量
+# 主要應用應該是針對 load balance or cluster 群組進行少量抽換升級或是改變
+
+- name: use serial and max_fail_percentage to limit run on hosts
+# 假設我們總共有 4 台機器 這四台機器是 load balancer 的群組
+# 如果我們一次對 4 台機器升級, 那服務就有可能會中斷
+# 透過 serial 的方式要求 Ansible 一次只能抓幾台機器來執行工作
+  hosts: all
+  sudo: True
+# 這邊 serial 設定為2 就是 一次抓 2 台, 成功之後再抓下兩台(按照hosts順序)
+# 也就是說 如果我們有 master / master2 / slave / slave2
+# 他抓了 master and master, 工作執行完會抓下一個兩台 slave and slave2
+  serial: 2
+# 這邊可以搭配 max_fail_percentage 來執行
+# 在沒有設定 max_fail_percentage 的狀況下, 不論每次的工作(2台)有沒有fail 工作都會執行下去
+
+# 如果有設定 max_fail_percentage 的狀況下, 如果 fail 的比率超過 max_fail_percentage 就會直接停止
+#   也就是說 如果抓的 2 台之中有台fail (50%), 這樣沒有超過 > max_fail_percentage, 還會繼續執行下面的 debug
+#   所以如果 max_fail_percentage 設為 49, 2台中有1台fail (50%), 超過比例就不會執行下面的 debug
+  max_fail_percentage: 50
+  tasks:
+  - name: test netstat with remote host
+# 這邊舉的例子是 觀察 port 8080 有沒有 listen
+    shell: netstat -tupln | grep :8080
+    register: netstat
+
+# 這邊的 debug 其實是觀察工作會不會繼續被執行
+  - debug: var=netstat.stdout_lines

@@ -1,0 +1,16 @@
+# Chapter 7 Running a Task on the Control Machine
+- name: use local_action to check file on conrol machine
+  hosts: all
+  tasks:
+  - name: test local_action
+# 使用 local_action 檢查 files/requirements.txt 存不存在
+# local_action 會針對 control machine 而非 remote hosts
+# 可以搭配 run_once 的方式來執行
+    local_action: shell ls -l files/requirements.txt
+# 使用 run_once 方式讓這個工作只執行一次, 因為是在control machine 所以不需要每個 remote machine 都執行
+    run_once: true
+    register: localaction
+
+# 上面的做法 其實就會在 files/requirements.txt 不存在fail, 這邊只是輸出而已
+  - debug: var=localaction.stdout_lines
+    run_once: true
