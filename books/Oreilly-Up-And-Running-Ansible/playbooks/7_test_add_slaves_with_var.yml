@@ -1,0 +1,10 @@
+# 之前 slave 的資訊沒有取得是因為雖然是針對 master 執行
+# 先建立一個針對所有的取得 facts 
+- name:  Get all facts
+  hosts: all
+
+# tasks 針對master 執行, 但是前面要先取得所有資訊
+- name: Add slaves to master 
+  hosts: cenic_master
+  tasks:
+    - template: src=templates/slaves dest=./slaves

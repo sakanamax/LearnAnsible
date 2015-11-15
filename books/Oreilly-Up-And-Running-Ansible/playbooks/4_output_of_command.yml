@@ -1,6 +1,6 @@
 # Chapter 4 Registering Variables
 - name: show return value of command module
-  hosts: testserver
+  hosts: cenic_master
   tasks:
     - name: capture output of id command
       command: id -un
