@@ -1940,8 +1940,7 @@
       &#160;&#160;&#160;&#160;run_once: true
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1447540021767" FOLDED="true" ID="ID_579000361" MODIFIED="1447540037383" TEXT="7_serial.yml">
@@ -2039,8 +2038,7 @@
       &#160;&#160;- debug: var=netstat.stdout_lines
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -4636,8 +4634,44 @@
 </node>
 </node>
 <node CREATED="1443829973228" ID="ID_462036346" MODIFIED="1443829980342" TEXT="ansible-playbook">
-<node CREATED="1443829981289" ID="ID_1309438617" MODIFIED="1443829982764" TEXT="ansible-playbook &lt;filename.yml&gt; ... [options]"/>
-<node CREATED="1445805401004" FOLDED="true" ID="ID_144427721" MODIFIED="1446152123099" TEXT="ansible-playbook --list-tasks &lt;filename.yml&gt;">
+<node CREATED="1443829981289" ID="ID_1309438617" MODIFIED="1443829982764" TEXT="ansible-playbook &lt;filename.yml&gt; ... [options]">
+<node CREATED="1447551595879" ID="ID_1783980809" MODIFIED="1447551598442" TEXT="-l">
+<node CREATED="1447551603559" FOLDED="true" ID="ID_509706439" MODIFIED="1447551814388" TEXT="tell Ansible to limit the hosts to run the playbook">
+<node CREATED="1447551644009" ID="ID_282053365" MODIFIED="1447551812198">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      # &#38614;&#28982; playbook &#20839;&#37341;&#23565;&#20840;&#37096;
+    </p>
+    <p>
+      # &#21487;&#20197;&#21033;&#29992; -l &#25110;&#26159; --limit &#37341;&#23565;&#29305;&#23450;&#30340;&#20027;&#27231;&#25110;&#26159;&#32676;&#32068;&#20358;&#22519;&#34892;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      ansible-playbook -l &quot;geni&quot; 4_gather_facts.yml
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#21487;&#20197;&#20351;&#29992; : &#20358;&#25351;&#23450;&#22810;&#20027;&#27231;&#25110;&#26159;&#32676;&#32068;
+    </p>
+    <p>
+      ansible-playbook -l &quot;geni:webservers&quot; 4_gather_facts.yml
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1445805401004" FOLDED="true" ID="ID_144427721" MODIFIED="1447551592932" TEXT="ansible-playbook --list-tasks &lt;filename.yml&gt;">
 <node CREATED="1445805421543" ID="ID_1785752086" MODIFIED="1445805461400">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -4679,6 +4713,109 @@
     </p>
     <p>
       &#160;&#160;&#160;&#160;debug var=ansible_version TAGS: []
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1447550682283" ID="ID_458354638" MODIFIED="1447550699206">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ansible-vault
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1447550760895" ID="ID_1159168120" MODIFIED="1447550772601" TEXT="&#x7528;&#x4f86;&#x52a0;&#x5bc6; yml"/>
+<node CREATED="1447550702653" FOLDED="true" ID="ID_101531433" MODIFIED="1447551210943" TEXT="ansible-vault [create|decrypt|edit|encrypt|rekey|view] [--help] [options] file_name">
+<node CREATED="1447550787775" ID="ID_528022321" MODIFIED="1447551203124">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      # &#24314;&#31435; &#21152;&#23494; &#27284;&#26696;&#160;&#26371;&#34987;&#35426;&#21839;&#21152;&#23494;&#23494;&#30908;
+    </p>
+    <p>
+      $ansible-vault create secret.yml
+    </p>
+    <p>
+      Vault password:
+    </p>
+    <p>
+      Confirm Vault password:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#23559;&#21152;&#23494;&#25991;&#20214;&#35299;&#23494;&#28858;&#19968;&#33324;&#25991;&#20214;
+    </p>
+    <p>
+      ansible-vault&#160;&#160;decrypt secret.yml
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#37325;&#26032;&#21152;&#23494;&#25991;&#20214;
+    </p>
+    <p>
+      ansible-vault&#160;&#160;encrypt secret.yml<br />
+    </p>
+    <p>
+      # &#35264;&#23519;&#25991;&#20214;&#20839;&#23481;
+    </p>
+    <p>
+      ansible-vault&#160;&#160;view secret.yml
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#32232;&#36655;&#25991;&#20214;&#20839;&#23481;
+    </p>
+    <p>
+      ansible-vault&#160;&#160;edit secret.yml
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#26356;&#25563;&#25991;&#20214; key
+    </p>
+    <p>
+      ansible-vault&#160;&#160;rekey secret.yml
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#20351;&#29992;&#20114;&#21205;&#26041;&#24335;&#35426;&#21839;&#23494;&#30908;&#160; &#22519;&#34892;&#21152;&#23494; yml
+    </p>
+    <p>
+      ansible-playbook secrets.yml --ask-vault-pass
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      # &#20351;&#29992;&#38750;&#20114;&#21205;&#26041;&#24335; &#22519;&#34892;&#21152;&#23494; yml
+    </p>
+    <p>
+      ansible-playbook secrets.yml --vault-password-file ./password.txt
+    </p>
+    <p>
+      &#160;
+    </p>
+    <p>
+      
     </p>
   </body>
 </html></richcontent>
