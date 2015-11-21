@@ -1,0 +1,17 @@
+# 跟playbook 差別點 1. 沒有 tasks:
+- name: install apt packages
+# 於 apt moudule 使用 sudo
+  sudo: True
+# 使用 pkg 加上 {{ item }} 配合後面的 with_item 來安裝多個套件
+  apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
+# 配合前面的 {{ item }} 來安裝多套件
+  with_items:
+    - scala
+
+# 這邊利用 register 以及 後面的 debug 來取得輸出
+- name: Show scala package
+  shell: apt-cache showpkg scala
+  register: scala
+# 這邊可以利用 var=scala 先觀察輸出的資料, 在指定輸出的範圍, 這邊用 .stdout_lines
+- debug: var=scala.stdout_lines
+

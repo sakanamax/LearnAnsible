@@ -1,0 +1,16 @@
+# Chapter 8 Using Roles in your playbook
+# 
+- name:  deploy telnetd on host
+  hosts: cenic_master
+# 這邊用 roles 指定 role
+  roles:
+# 所以相關檔案就會在 roles/telnetd/ 目錄下
+    - telnetd
+
+# 另外一個測試 role
+- name: Deploy scala on host
+  hosts: cenic_slave
+# 這邊用 roles 指定 roles
+  roles:
+# 所以相關檔案就會在 roles/scala/ 目錄下
+    - scala
