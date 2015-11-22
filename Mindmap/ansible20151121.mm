@@ -2197,7 +2197,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1443819785180" FOLDED="true" ID="ID_1635589193" MODIFIED="1447282265065" POSITION="left" TEXT="ansible.cfg">
+<node CREATED="1443819785180" ID="ID_1635589193" MODIFIED="1448150115970" POSITION="left" TEXT="ansible.cfg">
 <node CREATED="1445547496232" ID="ID_1005429082" MODIFIED="1445547498884" TEXT="http://docs.ansible.com/ansible/intro_configuration.html"/>
 <node CREATED="1443819864904" ID="ID_1587068918" MODIFIED="1445547189231" TEXT="Where should I put ansible.cfg?">
 <node CREATED="1443819877568" ID="ID_1465682131" MODIFIED="1443819962311">
@@ -2227,7 +2227,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1445547246769" ID="ID_1638387267" MODIFIED="1445548061125">
+<node CREATED="1445547246769" ID="ID_1638387267" MODIFIED="1448150343380">
 <richcontent TYPE="NODE"><html>
   <head>
     
@@ -2266,8 +2266,18 @@
     <p>
       host_key_checking = False
     </p>
+    <p>
+      # &#35373;&#23450; retry files (*.retry) &#23384;&#25918;&#36335;&#24465;, &#38928;&#35373;&#25918;&#23478;&#30446;&#37636;
+    </p>
+    <p>
+      # &#25105;&#33258;&#24049;&#21916;&#27489;&#25351;&#23450;&#22312;&#30446;&#21069;&#30446;&#37636;, &#20197;&#20813;&#20316;&#23436;&#23526;&#39511;&#23478;&#30446;&#37636;&#19968;&#22534; .retry
+    </p>
+    <p>
+      retry_files_save_path = ./ansible-retry
+    </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node CREATED="1446057987552" ID="ID_124862037" MODIFIED="1446058067534">
 <richcontent TYPE="NODE"><html>
@@ -2985,8 +2995,7 @@
       # &#22312; tasks/main.yml &#20839; &#21487;&#20197;&#20351;&#29992; - include &#26041;&#24335;&#21435;&#21628;&#21483;&#20854;&#20182; yml &#20358;&#22519;&#34892;, &#35731;&#24037;&#20316;&#26126;&#30906;&#31777;&#21934;&#21270;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448144171207" ID="ID_1073622815" MODIFIED="1448144175291" TEXT="Tasks">
 <node CREATED="1448144175961" ID="ID_1132072775" MODIFIED="1448144189027" TEXT="roles/database/tasks/main.yml"/>
 </node>
@@ -3011,8 +3020,7 @@
       # &#35201;&#27880;&#24847;&#36335;&#24465;&#30340;&#24046;&#30064;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448144215937" ID="ID_288356751" MODIFIED="1448144219413" TEXT="Templates">
@@ -3036,8 +3044,7 @@
       # &#35201;&#27880;&#24847;&#36335;&#24465;&#30340;&#24046;&#30064;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448144233042" ID="ID_1140023204" MODIFIED="1448144236741" TEXT="Hadlers">
@@ -3053,8 +3060,7 @@
       Variables that shouldn't be overridden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448144266707" ID="ID_915444222" MODIFIED="1448144280383" TEXT="roles/database/vars/main.yml"/>
 </node>
 <node CREATED="1448144312461" ID="ID_1444444488" MODIFIED="1448144328738" TEXT="Default variables that can be overridden">
@@ -3078,8 +3084,7 @@
       Ansible will look for roles in the roles directory alongside your . playbooks.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448144630763" ID="ID_1847975364" MODIFIED="1448144636370">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -3099,8 +3104,7 @@
       roles_path = ~/ansible_roles
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448145606873" ID="ID_1980293269" MODIFIED="1448145703800">
@@ -3133,8 +3137,7 @@
       &#160;&#160;&#160;&#160;&#160;apt: update_cache=yes
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1448145769774" ID="ID_1592442079" MODIFIED="1448145799054">
@@ -3150,8 +3153,7 @@
       Define a list of tasks that execute after the roles.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1448145799944" ID="ID_1562878447" MODIFIED="1448145937345">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -3180,8 +3182,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;msg=&quot;web server {{ inventory_hostname }} configured&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
