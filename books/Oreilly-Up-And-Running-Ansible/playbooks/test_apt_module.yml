@@ -1,0 +1,14 @@
+- name: Using Iteration (with_item) to install multiple packages
+  hosts: cenic_master
+#  sudo: True 這邊學到 sudo 不一定要放在一般選項內, 也可以放在 task 內
+  tasks:
+    - name: install apt packages
+# 於 apt moudule 使用 sudo
+      sudo: True
+# 使用 pkg 加上 {{ item }} 配合後面的 with_item 來安裝多個套件
+      apt: pkg={{ item }} update_cache=yes cache_valid_time=3600
+# 配合前面的 {{ item }} 來安裝多套件
+      with_items:
+        - openjdk-7-jdk
+        - wget
+        - scala

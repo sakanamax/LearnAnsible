@@ -1,0 +1,7 @@
+- name: Test shell module
+  hosts: cenic_master
+  tasks:
+    - name: Test shell module
+      shell: dpkg -l | grep ftp
+      register: dpkg
+    - debug: var=dpkg.stdout_lines

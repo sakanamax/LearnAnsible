@@ -1,0 +1,50 @@
+- name: Study Area at Tainan 20151226 - Jupyterhub
+# use group
+  hosts: jupyterhubDockerHost
+  sudo: True
+  tasks:
+    - name: Install docker
+      yum: name=docker
+
+    - name: Install curl
+      yum: name=curl
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+  
+    - name: Get Dockerfile
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/Jupyterhub_ansible_CentOS7_Dockerfile > /tmp/Dockerfile
+ 
+    - name: Build Docker image
+      shell: docker  build  -t  sakana/jupyterhub /tmp/
+
+    - name: Get create container script
+      sudo: False
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/create_15_jupyterhub_docker.sh > create_15_jupyterhub_docker.sh
+
+- name: Study Area at Tainan 20151226 - Lab VM
+# use group
+  hosts: vmDockerHost
+  sudo: True
+  tasks:
+    - name: Install docker
+      yum: name=docker
+
+    - name: Install curl
+      yum: name=curl
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+  
+    - name: Get Dockerfile
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/CentOS7sshd_Dockerfile > /tmp/Dockerfile
+ 
+    - name: Build Docker image
+      shell: docker  build  -t  sakana/sshd /tmp/
+
+    - name: Get create container script
+      sudo: False
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/create_15_sshd_docker.sh> create_15_sshd_docker.sh
+
+
+
