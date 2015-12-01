@@ -11,8 +11,8 @@ cenic_master  ansible_ssh_host=pcvm2-10.instageni.cenic.net ansible_ssh_user=max
 cenic_slave   ansible_ssh_host=pcvm1-7.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 
 # puppetlab
-cenic_master2 ansible_ssh_host=pcvm1-8.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
-cenic_slave2  ansible_ssh_host=pcvm1-27.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
+cenic_master2 ansible_ssh_host=pcvm1-2.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
+cenic_slave2  ansible_ssh_host=pcvm2-7.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 cenic_slave3  ansible_ssh_host=pcvm3-16.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 
 [jupyterhubDockerHost]
