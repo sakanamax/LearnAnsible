@@ -4,20 +4,30 @@
 # ansible_ssh_private_key_file -- SSH Key
 # testserver   ansible_ssh_host=129.114.108.187   ansible_ssh_user=cc ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/max_tacc.pem
 
-testserver3   ansible_ssh_host=129.114.108.188
+# Chameleon Cloud TACC
+testserver3    ansible_ssh_host=129.114.108.188
+
+
+# Chameleon Cloud UC
+server1 ansible_ssh_host=130.202.88.122 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
+server2 ansible_ssh_host=130.202.88.123 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
+
+
 
 # jupyterlab
 cenic_master  ansible_ssh_host=pcvm2-10.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 cenic_slave   ansible_ssh_host=pcvm1-7.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 
 # puppetlab
-cenic_master2 ansible_ssh_host=pcvm1-2.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
-cenic_slave2  ansible_ssh_host=pcvm2-7.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
+cenic_master2 ansible_ssh_host=pcvm2-5.instageni.cenic.net ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
+cenic_slave2  ansible_ssh_host=pcvm1-2.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 cenic_slave3  ansible_ssh_host=pcvm3-16.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 
 [jupyterhubDockerHost]
 
 [vmDockerHost]
+
+
 
 [jupyterlab]
 cenic_master
