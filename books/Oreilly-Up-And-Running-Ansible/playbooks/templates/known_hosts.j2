@@ -1,0 +1,8 @@
+{# Jinja 的註解方式 #}
+{% for host in groups['puppetlab'] %}
+{# know_hosts 裏面可以建立 ip address, fqdn 看看要連線的方式而定, 不要忘記 ssh-rsa #}
+{# 下面這個是 fqdn 方式 #}
+{{ hostvars[host]['ansible_fqdn'] }} ssh-rsa {{ hostvars[host]['ansible_ssh_host_key_rsa_public'] }}
+{# 這個是用 ip 的方式, 建立兩個都要加, 也有{{ hostvars[host]['ansible_hostname'] }} 方式, 但是要看名稱解析 #}
+{{ hostvars[host].ansible_default_ipv4.address }} ssh-rsa {{ hostvars[host]['ansible_ssh_host_key_rsa_public'] }}
+{% endfor %}

@@ -7,10 +7,16 @@
 # Chameleon Cloud TACC
 testserver3    ansible_ssh_host=129.114.108.188
 
+# Chameleon Cloud TACC - SA@Tainan
+testserver1    ansible_ssh_host=129.114.108.43
+testserver5    ansible_ssh_host=129.114.108.44
+server39       ansible_ssh_host=129.114.108.191
+server40       ansible_ssh_host=129.114.108.192
 
 # Chameleon Cloud UC
-server1 ansible_ssh_host=130.202.88.122 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
-server2 ansible_ssh_host=130.202.88.123 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
+server3 ansible_ssh_host=130.202.88.131 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
+server4 ansible_ssh_host=130.202.88.132 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
+server5 ansible_ssh_host=130.202.88.134 ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/Chameleon\ Cloud/chi_uc_chameleoncloud.pem
 
 
 
@@ -24,10 +30,15 @@ cenic_slave2  ansible_ssh_host=pcvm1-2.instageni.cenic.net  ansible_ssh_user=max
 cenic_slave3  ansible_ssh_host=pcvm3-16.instageni.cenic.net  ansible_ssh_user=maxhuang ansible_ssh_private_key_file=~/Dropbox/2015/NCHC/iCAIR/study/GENI/id_rsa
 
 [jupyterhubDockerHost]
+testserver1
+server3
 
 [vmDockerHost]
-
-
+testserver5
+server39
+server40
+server4
+server5
 
 [jupyterlab]
 cenic_master

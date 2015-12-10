@@ -1,0 +1,10 @@
+---
+# 使用 groups 變數去自動加入 known_hosts
+- name: Use groups variable to create know_hosts files
+  hosts: puppetlab
+  tasks:
+    - name: Create known_hosts
+# 這邊使用 templates/known_hosts.j2 建立 known_hosts 在~/.ssh/known_hosts
+# 這邊要注意, 如果有檔案存在 template module 預設是 force 就是會覆蓋原有檔案,檔案沒有改變不會覆蓋
+# 可以使用 backup=yes 來備份原有檔案, 名稱會是原有名稱.yyyy-mm-dd@HH:MM:ss~
+      template: src=templates/known_hosts.j2 dest=~/.ssh/known_hosts mode=0644 backup=yes
