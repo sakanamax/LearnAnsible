@@ -1,0 +1,94 @@
+# Study Area at Tainan 20151226
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+- name: Study Area at Tainan 20151226 - Jupyterhub
+# use group
+  hosts: jupyterhubDockerHost
+  sudo: True
+  tasks:
+    - name: Install docker with CentOS
+      yum: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "CentOS"
+
+    - name: Install docker with Ubuntu
+      apt: name={{ item }} update_cache=yes
+      with_items:
+        - docker.io
+        - curl
+      when: ansible_distribution == "Ubuntu"
+
+   
+    - name: Create docker link with Ubuntu
+      shell: ln -sf /usr/bin/docker.io /usr/local/bin/docker
+      when: ansible_distribution == "Ubuntu"
+
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+  
+    - name: Get Dockerfile with CentOS
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/Jupyterhub_ansible_CentOS7_Dockerfile > /tmp/Dockerfile
+
+    - name: Build Docker image
+      shell: docker  build  -t  sakana/jupyterhub /tmp/
+
+    - name: Get create container script
+      sudo: False
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/create_15_jupyterhub_docker.sh > create_15_jupyterhub_docker.sh
+
+- name: Study Area at Tainan 20151226 - Lab VM
+# use group
+  hosts: vmDockerHost
+  sudo: True
+  tasks:
+    - name: Install docker with CentOS
+      yum: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "CentOS"
+
+    - name: Install docker with Ubuntu
+      apt: name={{ item }} update_cache=yes
+      with_items:
+        - docker.io
+        - curl
+      when: ansible_distribution == "Ubuntu"
+
+   
+    - name: Create docker link with Ubuntu
+      shell: ln -sf /usr/bin/docker.io /usr/local/bin/docker
+      when: ansible_distribution == "Ubuntu"
+
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+  
+  
+    - name: Get Dockerfile with CentOS
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/CentOS7sshd_Dockerfile > /tmp/Dockerfile
+      when: ansible_distribution == "CentOS"
+ 
+    - name: Get Dockerfile with Ubuntu
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/Ubuntu1404sshd_Dockerfile > /tmp/Dockerfile
+      when: ansible_distribution == "Ubuntu"
+ 
+    - name: Build Docker image
+      shell: docker  build  -t  sakana/sshd /tmp/
+
+    - name: Get create container script
+      sudo: False
+      shell: curl https://dl.dropboxusercontent.com/u/12787647/20151226SA/create_15_sshd_docker.sh> create_15_sshd_docker.sh
+
+
+
