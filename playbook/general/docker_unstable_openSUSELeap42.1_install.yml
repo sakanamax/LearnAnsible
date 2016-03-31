@@ -2,8 +2,7 @@
 #########################################################  
 # Install docker package and setup boot with unstable repo in openSUSE Leap 42.1
 - name: use when conditionals and setup module (facts)
-# use [dockerUnstable] group to install
-  hosts: dockerUnstable
+  hosts: all
   tasks:
 # 使用 setup moudule 列出 OS 種類
     - name: use setup module to list os distribution
@@ -14,8 +13,8 @@
 #########################################################  
 
 - name: Install docker and run service
-# use group
-  hosts: DockerHost
+# use [dockerUnstable] group to install
+  hosts: dockerUnstable
   sudo: True
   tasks:
 # Add Virtualization:container project repo
