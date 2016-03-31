@@ -1,0 +1,54 @@
+---
+#########################################################  
+# Install docker package and setup boot
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install docker and run service
+# use group
+  hosts: DockerHost
+  sudo: True
+  tasks:
+    - name: Install docker with openSUSE Leap
+      zypper: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "openSUSE Leap"
+
+    - name: Install docker with CentOS
+      yum: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "CentOS"
+
+    - name: Install docker with Ubuntu
+      apt: name={{ item }} update_cache=yes
+      with_items:
+        - docker.io
+        - curl
+      when: ansible_distribution == "Ubuntu"
+
+   
+    - name: Create docker link with Ubuntu
+      shell: ln -sf /usr/bin/docker.io /usr/local/bin/docker
+      when: ansible_distribution == "Ubuntu"
+
+#-------------------------------------------------------  
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+
+
+
+
+
