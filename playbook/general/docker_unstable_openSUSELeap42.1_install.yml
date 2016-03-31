@@ -1,0 +1,41 @@
+---
+#########################################################  
+# Install docker package and setup boot with unstable repo in openSUSE Leap 42.1
+- name: use when conditionals and setup module (facts)
+# use [dockerUnstable] group to install
+  hosts: dockerUnstable
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install docker and run service
+# use group
+  hosts: DockerHost
+  sudo: True
+  tasks:
+# Add Virtualization:container project repo
+    - name: Add Virutalization:containers repo
+      shell: zypper  --gpg-auto-import-keys   addrepo   -f http://download.opensuse.org/repositories/Virtualization:/containers/openSUSE_Leap_42.1/Virtualization:containers.repo
+
+    - name: Install docker with openSUSE Leap
+      zypper: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "openSUSE Leap"
+
+
+#-------------------------------------------------------  
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+
+
+
+
+
