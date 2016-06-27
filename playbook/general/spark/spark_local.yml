@@ -1,7 +1,13 @@
 # 
 - name: Install spark with local
   hosts: sparkSingle
-#  sudo: True 這邊學到 sudo 不一定要放在一般選項內, 也可以放在 task 內
+#  透過 vars_prompt 動態詢問要裝的版本, 預設是 1.4.0
+  vars_prompt:
+    - name: "spark_version"
+      prompt: "Please enter spark version, example 1.4.0"
+      private: no
+      default: "1.4.0"
+
   tasks:
     - name: Install java, wget  with openSUSE Leap
 # Use sudo before ansible 1.9
@@ -65,7 +71,9 @@
 # 由於沒有在 general option 使用 sudo, 這邊在使用 shell module 抓下來就是使用者自己的身份額非 root
 # 這邊用 spark 1.4.0 版本
     - name: Download spark with pre-build hadoop
-      shell: wget    http://archive.apache.org/dist/spark/spark-1.4.0/spark-1.4.0-bin-hadoop2.6.tgz
+#      shell: wget    http://archive.apache.org/dist/spark/spark-1.4.0/spark-1.4.0-bin-hadoop2.6.tgz
+      shell: wget    http://archive.apache.org/dist/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop2.6.tgz
+
 
 # 解開 source code
     - name: Exact pre-build source
