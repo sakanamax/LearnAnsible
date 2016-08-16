@@ -19,7 +19,7 @@
   tasks:
 # Add Virtualization:container project repo
     - name: Add Virutalization:containers repo
-      shell: zypper  --gpg-auto-import-keys   addrepo   -f http://download.opensuse.org/repositories/Virtualization:/containers/openSUSE_Leap_42.1/Virtualization:containers.repo
+      shell: zypper  --gpg-auto-import-keys   addrepo   -f http://download.opensuse.org/repositories/Virtualization:/containers:/1.12-RC/openSUSE_Leap_42.1/Virtualization:containers:1.12-RC.repo
       when: ansible_distribution == "openSUSE Leap"
 
     - name: Install docker with openSUSE Leap
