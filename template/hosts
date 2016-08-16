@@ -1,6 +1,6 @@
 # syntax: servername  options
-# ansible_ssh_host -- Remote Host IP
-# ansible_ssh_user -- Remote SSH User Name
+# ansible_host -- Remote Host IP
+# ansible_user -- Remote SSH User Name
 # ansible_ssh_private_key_file -- SSH Key
 # testserver   ansible_ssh_host=xxx.xxx.xxx.xxx   ansible_ssh_user=root   ansible_ssh_private_key_file=
 
