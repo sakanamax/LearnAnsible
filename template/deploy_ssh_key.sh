@@ -1,7 +1,7 @@
 #!/bin/bash
 # 這個 script 是用來佈署 ssh key 到其他主機, 方便 ansible 作業
-# 執行方式 #sh deploy_ssh_key.sh 主機IP
-# 例如 #sh deploy_ssh_key.sh  192.168.100.1
+# 執行方式 #sh deploy_ssh_key.sh 使用者@主機IP
+# 例如 #sh deploy_ssh_key.sh  使用者@192.168.100.1
 #
 # 建立本機的 DSA Key pair, 勇敢的按下 Enter吧
 echo -e "\033[31m"
@@ -23,7 +23,7 @@ ssh $1 "mkdir /root/.ssh/"
 echo -e "\033[33m"
 echo "=== Password: 後面請輸入對方主機密碼 ==="
 echo -e "\033[0m"
-scp /root/.ssh/id_dsa.pub $1:/root/.ssh/authorized_keys
+scp ~/.ssh/id_dsa.pub $1:/root/.ssh/authorized_keys
 # 進行測試
 ssh $1 "ifconfig| grep Bcast"
 
