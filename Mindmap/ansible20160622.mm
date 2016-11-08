@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node CREATED="1443467597901" ID="ID_1087109312" MODIFIED="1443467610348" STYLE="bubble" TEXT="ansible">
+<node CREATED="1443467597901" ID="ID_1087109312" MODIFIED="1478055213514" STYLE="bubble" TEXT="ansible">
 <node CREATED="1443467740138" ID="ID_1941958344" MODIFIED="1443467743431" POSITION="right" TEXT="Book">
 <node CREATED="1443467743924" ID="ID_472419872" MODIFIED="1443467755668" TEXT="Oreilly - Ansible up &amp; running">
 <node CREATED="1443467756613" ID="ID_734892022" MODIFIED="1443467775275">
@@ -2642,8 +2642,7 @@
       test_vsphere_guest_delete_one_vm.yml
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1466514963371" ID="ID_1977406795" MODIFIED="1466514979473">
 <richcontent TYPE="NODE"><html>
   <head>
@@ -2986,8 +2985,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;force: yes
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1466515766848" FOLDED="true" ID="ID_510974258" MODIFIED="1466584161093" TEXT="test_vsphere_guest_deploy_from_template.yml">
@@ -3220,8 +3218,7 @@
       #&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;resource_pool: &quot;/Resources&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1466587379729" FOLDED="true" ID="ID_1159181061" MODIFIED="1466587401666" TEXT="test_vsphere_guest_reconfig_vm.yml">
@@ -3445,8 +3442,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;hostname: &quot;{{ esxi_hostname }}&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1466587444580" FOLDED="true" ID="ID_1125121934" MODIFIED="1466587466468" TEXT="test_vsphere_guest_create_newvm.yml">
@@ -3742,8 +3738,7 @@
       &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;hostname: &quot;{{ esxi_hostname }}&quot;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -7848,8 +7843,7 @@
       test_vsphere_guest_delete_one_vm.yml
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1466514963371" ID="ID_1001896991" MODIFIED="1466514979473">
 <richcontent TYPE="NODE"><html>
   <head>
