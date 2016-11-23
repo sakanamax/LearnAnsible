@@ -1,0 +1,89 @@
+# 
+- name: DevOps Meet Up 3
+  hosts: DevOps1
+#  sudo: True 這邊學到 sudo 不一定要放在一般選項內, 也可以放在 task 內
+  tasks:
+# 新增 CentOS EPEL 安裝來源
+    - name: Add CentOS EPEL
+      become: True
+      yum: name=epel-release
+# 使用 when 條件針對 CentOS 才實行
+      when: ansible_distribution == "CentOS"
+
+# 安裝 LEMP 套件
+    - name: Install LEMP (Nginx / MySQL / PHP)
+# Use sudo before ansible 1.9
+#      sudo: True
+      become: True
+# 使用 pkg 加上 {{ item }} 配合後面的 with_item 來安裝多個套件
+      yum: name={{ item }}
+      with_items:
+        - nginx
+        - mariadb-server
+        - php
+      when: ansible_distribution == "CentOS"
+
+# 這個部份利用 rpm -qa 來檢查是否有安裝
+    - name: Check install result
+      become: True
+      shell: rpm -qa | egrep -i 'nginx|mariadb|php'
+# 將執行的結果登記為 result 變數, 後面來利用
+      register: result
+# 利用 ignore_errors 讓如果套件沒有安裝也不會報錯而停止
+      ignore_errors: True
+
+# 透過 debug 方式列出結果
+    - name: Packages result list
+# 這個部份可以就變數的輸出來選擇要列出的區段
+      debug: var=result.stdout_lines
+
+# ----------------------------------------------------------
+
+# 列出原來 sshd 設定內的 Port 關鍵字
+    - name: grep sshd port in /etc/ssh/sshd_config
+      become: True
+      shell: grep -w Port /etc/ssh/sshd_config
+      register: result2
+
+# 利用 debug 列出資訊   
+    - name: sshd port
+      debug: var=result2.stdout_lines
+
+# 透過 lineinfile 模組加入 Port 2222 設定
+    - name: Add port 2222 to /etc/ssh/sshd_config
+      become: True
+      lineinfile: line="Port 2222" dest=/etc/ssh/sshd_config
+
+# 列出目前相關設定
+    - name: grep sshd port in /etc/ssh/sshd_config
+      become: True
+      shell: grep -w Port /etc/ssh/sshd_config
+      register: result3
+
+# 利用 debug 列出資訊
+    - name: sshd port output
+      debug: var=result3.stdout_lines
+
+# ----------------------------------------------------------
+
+
+# 使用 script 模組 設定 iptables
+    - name: Using script module to reconfig iptalbes
+      become: True
+# 使用 script 模組去執行script目錄下的 iptables.sh
+      script: script/iptables.sh
+
+# 列出 iptables 規則
+    - name: List iptables Rules
+      become: True
+      shell: iptables -L
+      register: result4
+
+# 列出 iptables 規則
+    - name: iptables output
+      debug: var=result4.stdout_lines
+
+# ----------------------------------------------------------
+
+
+

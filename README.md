@@ -10,6 +10,7 @@ playbook/ - 自己撰寫的 ansible playbook
 
 playbook/general/ - 一般用途的ansible playbook
 
+events/ - 活動相關
 ------------------
 
 
