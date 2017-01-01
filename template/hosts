@@ -3,6 +3,7 @@
 # ansible_user -- Remote SSH User Name
 # ansible_ssh_private_key_file -- SSH Key
 # ansible_ssh_pass -- SSH Password for remote host
+# ansible_port -- Remote SSH port
 # testserver   ansible_host=xxx.xxx.xxx.xxx   ansible_user=root   ansible_ssh_private_key_file=
 
 
