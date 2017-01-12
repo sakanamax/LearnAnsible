@@ -1,0 +1,159 @@
+---
+#########################################################  
+# 
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install nagios server and run service
+# 使用群組方式安裝 use group, 請配合 hosts 內的 [NagiosServer]
+  hosts: NagiosServer
+  become: True
+# 透過提示來輸入相關變數
+  vars_prompt:
+     - name: "nagiosadmin_password"
+       prompt: "Enter nagiosadmin password"
+# private 設定為 no 會顯示輸入的內容
+       private: yes
+# 這邊可以設定預設值
+       default: nagiosadmin
+
+     - name: "nagiosadmin_email"
+       prompt: "Enter nagiosadmin e-mail"
+       private: no
+       default: nagios@localhost
+
+  tasks:
+    - name: Install nagios and nrpe with openSUSE Leap
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
+      zypper: name={{ item }} disable_recommends=no
+      with_items:
+        - nagios
+        - monitoring-plugins
+        - nrpe
+        - monitoring-plugins-nrpe
+      when: ansible_distribution == "openSUSE Leap"
+
+#-------------------------------------------------------  
+
+# 設定 nagiosadmin 登入密碼
+    - name: set nagiosadmin password
+      shell: htpasswd2 -bc /etc/nagios/htpasswd.users nagiosadmin {{ nagiosadmin_password }}
+
+#-------------------------------------------------------  
+
+# 由於 apache2.2 and apache2.4 相容性問題, 啟用 access_compat 模組
+    - name: enable apache mod_access_compat
+      shell: a2enmod mod_access_compat
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+    - name: fix localhost.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/localhost.cfg -O /etc/nagios/objects/localhost.cfg
+#      get_url: 
+#        url: https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/localhost.cfg 
+#        dest: /etc/nagios/objects/localhost.cfg 
+#        backup: yes
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+    - name: use modified template.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/templates.cfg -O /etc/nagios/objects/templates.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+    - name: use modified commands.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/commands.cfg  -O /etc/nagios/objects/commands.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 linux 公共服務的範本
+    - name: use modified linuxPublic.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/linuxPublic.cfg   -O /etc/nagios/objects/linuxPublic.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 linux 服務的範本( 自己控管的主機 )
+    - name: use modified linux.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/linux.cfg    -O /etc/nagios/objects/linux.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 windows 公共服務的範本( 非自己控管的主機 )
+    - name: use modified windowsPublic.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/windowsPublic.cfg    -O /etc/nagios/objects/windowsPublic.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 windows 服務的範本( 自己控管的主機 )
+    - name: use modified windows.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/windows.cfg     -O /etc/nagios/objects/windows.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 switch 的範本, 只監控 IP 不監控 snmp
+    - name: use modified switchSimple.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/switchSimple.cfg    -O /etc/nagios/objects/switchSimple.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 用來當成監控 rack 的範本, 只監控 IP
+    - name: use modified rackHost.cfg
+      shell: wget   https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/rackHost.cfg    -O /etc/nagios/objects/rackHost.cfg
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 修改使用 cfg_dir= 參數於 nagios.cfg
+    - name: use modified nagios.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/nagios.cfg      -O /etc/nagios/nagios.cfg
+
+#-------------------------------------------------------  
+
+# 建立相關工作目錄
+    - name:  create working dir for nagios *.cfg
+      shell: mkdir  /etc/nagios/{servers,pcs,racks,switches,projects,labs}
+
+
+#-------------------------------------------------------  
+# 使用 replace module 去修改 nagiosadmin 通知 e-mail
+    - name: Set nagiosadmin e-mail
+      replace: 
+        dest: /etc/nagios/objects/contacts.cfg 
+        regexp: 'nagios@localhost'
+        replace: "{{ nagiosadmin_email }}" 
+        backup: yes
+
+#-------------------------------------------------------  
+
+# 設定 apache2 啟動與開機啟動
+    - name: Set apache2 enable and run
+      service: name=apache2 state=started enabled=yes
+
+#-------------------------------------------------------  
+
+# 設定 nagios 啟動與開機啟動
+    - name: Set nagios enable and run
+      service: name=nagios state=started enabled=yes
+
+#-------------------------------------------------------  
+
+
+
+

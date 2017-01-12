@@ -1,0 +1,118 @@
+---
+#########################################################  
+# 
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install nagios client and run service
+# 使用群組方式安裝 use group, 請配合 hosts 內的 [NagiosServer]
+  hosts: NagiosClient
+  become: True
+# 透過提示來輸入相關變數
+  vars_prompt:
+     - name: "nagios_ip"
+       prompt: "Enter nagios server's ip"
+# private 設定為 no 會顯示輸入的內容
+       private: no
+# 這邊可以設定預設值
+#       default: 
+  tasks:
+    - name: Install nrpe with openSUSE Leap
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
+      zypper: name={{ item }} disable_recommends=no
+      with_items:
+        - nrpe
+        - monitoring-plugins
+        - monitoring-plugins-nrpe
+      when: ansible_distribution == "openSUSE Leap"
+
+#-------------------------------------------------------  
+
+# 使用修改過的 *.cfg 請詳見 github https://github.com/sakanamax/LearnAnsible/tree/master/playbook/general/nagios/files
+# 加入相關 commands
+    - name: use modified nrpe.cfg
+      shell: wget  https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/playbook/general/nagios/files/nrpe.cfg  -O /etc/nrpe.cfg
+
+#-------------------------------------------------------  
+
+# 使用 replace module 去修改 allowed_hosts
+    - name: Set allowed_hosts
+      replace: 
+        dest: /etc/nrpe.cfg 
+        regexp: 'allowed_hosts=127.0.0.1'
+        replace: "allowed_hosts=127.0.0.1,{{ nagios_ip }}" 
+        backup: yes
+
+#-------------------------------------------------------  
+
+# 設定 nrpe 啟動與開機啟動
+    - name: Set nrpe enable and run
+      service: name=nrpe state=started enabled=yes
+
+#-------------------------------------------------------  
+
+
+- name: Copy client config to folder
+# 使用群組方式安裝 use group, 請配合 hosts 內的 [NagiosServer]
+  hosts: NagiosServer
+  become: True
+# 透過提示來輸入相關變數
+  vars_prompt:
+     - name: "cfg_type"
+       prompt: "Enter client config template name"
+# private 設定為 no 會顯示輸入的內容
+       private: no
+# 這邊可以設定預設值
+       default: linux.cfg
+
+     - name: "cfg_folder"
+       prompt: "Enter client config save folder name in /etc/nagios"
+       private: no
+       default: labs
+
+  tasks:
+    - name: copy template config to folder
+#      shell: cp  /etc/nagios/objects/{{ cfg_type }}  /etc/nagios/{{ cfg_folder }}/{{ hostvars['test4']['ansible_default_ipv4'].address }}.cfg
+# 這邊卡了我很久, 這邊透過 hostvars 與 item ( with_item ) 來指定 facts 感謝 https://groups.google.com/forum/#!topic/ansible-project/X6zCbW6S1fo
+      shell: cp  /etc/nagios/objects/{{ cfg_type }}  /etc/nagios/{{ cfg_folder }}/{{ hostvars[item]['ansible_default_ipv4'].address }}.cfg
+# 這邊透過 with_item 來使用 loop , 將 NagiosClient 群組內的主機放進來
+      with_items: "{{ groups['NagiosClient'] }}"
+
+# 將預設 IP 改為 client IP
+    - name: replace with client's ip
+# 使用 replace module 更改 IP
+      replace:
+        dest: /etc/nagios/{{ cfg_folder }}/{{ hostvars[item]['ansible_default_ipv4'].address }}.cfg
+        regexp: '192.168.3.129'
+        replace: "{{ hostvars[item]['ansible_default_ipv4'].address }}"
+#        backup: yes
+# 這邊 with_items 沒有跟 replace 對齊造成 loop 失敗花了我很多時間, 下次要注意
+      with_items: "{{ groups['NagiosClient'] }}"
+
+# 將預設 hostname 更改
+    - name: replace with client's hostname
+      replace:
+        dest: /etc/nagios/{{ cfg_folder }}/{{ hostvars[item]['ansible_default_ipv4'].address }}.cfg
+        regexp: 'suseserver129'
+        replace: "{{ hostvars[item]['ansible_hostname'] }}"
+#        backup: yes
+      with_items: "{{ groups['NagiosClient'] }}"
+
+
+#-------------------------------------------------------  
+
+# 將 nagios reload
+    - name: Set nagios reload conf
+      service: name=nagios state=reloaded 
+
+#-------------------------------------------------------  
+
+
