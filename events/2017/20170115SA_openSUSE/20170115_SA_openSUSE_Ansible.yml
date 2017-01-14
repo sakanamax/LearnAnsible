@@ -1,0 +1,100 @@
+---
+#########################################################  
+# Study Area x openSUSE 20170115
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+# 安裝 docker 套件
+- name: 20170115 - Jupyterhub
+# use group
+  hosts: jupyterhubDockerHost
+#  sudo: True
+  become: True
+# 透過提示來輸入相關變數
+  vars_prompt:
+     - name: "user_ansible_password"
+       prompt: "Enter user ansible password in jupyterhub"
+# private 設定為 no 會顯示輸入的內容
+       private: yes
+# 這邊可以設定預設值
+       default: 2017openSUSE
+
+  tasks:
+    - name: Install docker with openSUSE Leap
+      zypper: name={{ item }}
+      with_items:
+        - docker
+        - curl
+      when: ansible_distribution == "openSUSE Leap"
+
+    - name: Install docker with CentOS
+      yum: name={{ item }}
+      with_items:
+        - epel-release
+        - docker
+        - curl
+      when: ansible_distribution == "CentOS"
+
+    - name: Install docker with Ubuntu
+      apt: name={{ item }} update_cache=yes
+      with_items:
+        - docker.io
+        - curl
+      when: ansible_distribution == "Ubuntu"
+
+   
+    - name: Create docker link with Ubuntu
+      shell: ln -sf /usr/bin/docker.io /usr/local/bin/docker
+      when: ansible_distribution == "Ubuntu"
+
+#-------------------------------------------------------  
+
+
+# 設定 docker 啟動
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+
+
+#-------------------------------------------------------  
+# 這邊看看要選那個 Dockerfile 來編譯
+    - name: Get Dockerfile with CentOS 7 with ansible 2.x now
+#      shell: curl https://dl.dropboxusercontent.com/u/12787647/2016/20160716SA/Jupyterhub_ansible_CentOS7_Dockerfile > /tmp/Dockerfile
+      shell: curl https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/events/2017/20170115SA_openSUSE/Jupyterhub_ansible_CentOS7_Dockerfile > /tmp/Dockerfile
+
+#    - name: Get Dockerfile with ubuntu 14.04.3 with ansible 2.x
+#      shell: curl https://dl.dropboxusercontent.com/u/12787647/2016/20160516SA/Jupyterhub_ansible_Ubuntu14.04.3_Dockerfile > /tmp/Dockerfile
+
+
+#-------------------------------------------------------  
+# 處理密碼變更
+    - name: Setup Jupyterhub user ansible password
+      replace:
+        dest: /tmp/Dockerfile
+        regexp: '2016StudyArea'
+        replace: "{{ user_ansible_password }}"
+        backup: yes
+
+
+#-------------------------------------------------------  
+
+    - name: Build Docker image
+      shell: docker  build  -t  sakana/jupyterhub /tmp/
+
+#-------------------------------------------------------  
+
+
+    - name: Get create container script
+#      sudo: False
+      become: False
+      shell: curl https://raw.githubusercontent.com/sakanamax/LearnAnsible/master/events/2017/20170115SA_openSUSE/create_15_jupyterhub_docker.sh  > create_15_jupyterhub_docker.sh
+
+
+
+
