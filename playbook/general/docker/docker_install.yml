@@ -15,7 +15,8 @@
 - name: Install docker and run service
 # use group
   hosts: DockerHost
-  sudo: True
+#  sudo: True
+  become: True
   tasks:
     - name: Install docker with openSUSE Leap
       zypper: name={{ item }}
