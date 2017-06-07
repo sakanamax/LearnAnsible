@@ -1,0 +1,110 @@
+---
+#########################################################  
+# 20170607 edit by sakana
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install ceph-common packages and setup
+# 使用群組方式安裝 ceph-common套件, 請配合 hosts 內的 [cephRbdClient]
+  hosts: cephRbdClient
+  become: True
+# 透過提示來輸入相關變數
+  vars_prompt:
+     - name: "ceph_mon_host"
+       prompt: "Enter ceph mon host IP"
+# private 設定為 no 會顯示輸入的內容
+       private: no
+# 這邊可以設定預設值
+
+     - name: "ceph_id"
+       prompt: "Enter your ceph id"
+       private: no
+#       default: 
+
+     - name: "ceph_key"
+       prompt: "Please paste your ceph key"
+       private: no
+
+     - name: "pool_image_name"
+       prompt: "Please input your pool/image name, like rbd/test"
+       private: no
+       default: "rbd/test"
+
+
+  tasks:
+    - name: Install ceph-common with openSUSE Leap
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入建議的其他套件
+      zypper: name={{ item }} disable_recommends=no
+      with_items:
+        - ceph-common
+      when: ansible_distribution == "openSUSE Leap"
+
+#-------------------------------------------------------  
+
+# 設定 /etc/ceph/ceph.conf 檔案
+    - name: set /etc/ceph/ceph.conf
+      template: src=templates/ceph.conf dest=/etc/ceph/ceph.conf 
+
+#-------------------------------------------------------  
+
+# 設定 keyring
+    - name: set up keyring
+      template: src=templates/keyring dest=/etc/ceph/ceph.client.{{ceph_id}}.keyring
+
+#-------------------------------------------------------  
+
+# 進行 rbd map
+    - name: map rbd image
+      shell: rbd  --id  {{ceph_id}} map {{pool_image_name}}
+
+#-------------------------------------------------------  
+
+# 檢查 rbd map images 
+    - name: check rbd map images
+      shell: rbd --id {{ceph_id}} showmapped
+
+#-------------------------------------------------------  
+
+# 進行 /dev/rbd0 格式化 xfs
+    - name: use mkfs.xfs to create xfs with /dev/rbd0
+      shell: mkfs.xfs  -f  /dev/rbd0
+
+#-------------------------------------------------------  
+
+
+
+# 透過 mount module 掛載 /dev/rbd0 到 /mnt/rbd0 並修改 /etc/fstab
+# 使用 file module 的好處是可以同時處理 /etc/fstab
+    - name: mount /dev/rbd0 to /mnt/rbd0
+      mount: src=/dev/rbd0 name=/mnt/rbd0 state=mounted fstype=xfs
+
+#-------------------------------------------------------  
+
+# 設定 /etc/ceph/rbdmap
+    - name: set up /etc/ceph/rbdmap
+#    2.3 以前的版本不可以使用 path
+#      lineinfile: path=/etc/ceph/rbdmap line='{{pool_image_name}}  id={{ceph_id}},keyring=/etc/ceph/ceph.client.{{ceph_id}}.keyring'
+      lineinfile: name=/etc/ceph/rbdmap line='{{pool_image_name}}  id={{ceph_id}},keyring=/etc/ceph/ceph.client.{{ceph_id}}.keyring'
+
+#-------------------------------------------------------  
+
+# 設定 rbdmap 啟動與開機啟動
+    - name: Set rbdmap enable and run
+      service: name=rbdmap state=started enabled=yes
+
+#-------------------------------------------------------  
+
+
+#-------------------------------------------------------  
+
+
+
+

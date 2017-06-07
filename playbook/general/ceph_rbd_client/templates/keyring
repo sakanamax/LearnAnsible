@@ -1,0 +1,2 @@
+[client.{{ ceph_id }}]
+      key = {{ ceph_key }}
