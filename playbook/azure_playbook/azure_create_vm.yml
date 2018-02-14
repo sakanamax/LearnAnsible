@@ -1,0 +1,24 @@
+---
+# Azure VM 相關測試
+- name: use when conditionals and setup module
+  hosts: localhost
+  connection: local
+  tasks:
+   - name: Create Azure test VM
+     azure_rm_virtualmachine:
+       resource_group: sakanatest
+       name: test20180214-8
+       admin_username: sakana
+       admin_password: Your_Password
+# 這邊可以對應到已經有的儲存體
+#       storage_account: sakanatestdiag34
+# 經實驗 vm_size 是必須的
+       vm_size: Basic_A1
+#
+# image 相關資訊可以使用 az vm image list --output table 查詢
+       image:
+         offer: openSUSE-Leap
+         publisher: SUSE
+         sku: '42.3'
+         version: latest
+#

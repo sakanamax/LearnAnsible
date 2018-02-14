@@ -1,0 +1,10 @@
+---
+# Azure VM 相關測試
+- name: use when conditionals and setup module
+  hosts: localhost
+  tasks:
+   - name: Start Azure test VM
+     azure_rm_virtualmachine:
+       resource_group: sakanatest
+       name: test20180214-6
+       started: yes
