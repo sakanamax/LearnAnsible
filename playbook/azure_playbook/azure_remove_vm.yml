@@ -1,10 +1,16 @@
 ---
 # Azure VM 相關測試
+# edit by sakan 2018/2/17
 - name: use when conditionals and setup module
   hosts: localhost
+  vars_prompt:
+    - name: "vm_name"
+      prompt: "Enter VM name your want to remove"
+      private: no
+
   tasks:
    - name: Remove Azure test VM
      azure_rm_virtualmachine:
        resource_group: sakanatest
-       name: test20180214-7
+       name: "{{ vm_name }}"
        state: absent
