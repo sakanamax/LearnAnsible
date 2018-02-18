@@ -1,0 +1,24 @@
+---
+# Azure VM 相關測試
+# edit by sakan 2018/2/17
+- name: use when conditionals and setup module
+  hosts: localhost
+  vars_prompt:
+    - name: "sequence_start"
+      prompt: "Enter sequence start number"
+      private: no
+      default: 1
+
+    - name: "sequence_end"
+      prompt: "Enter sequence end number, Max is 99"
+      private: no
+      default: 10
+
+
+  tasks:
+   - name: Remove Azure test VM
+     with_sequence: start={{ sequence_start }} end={{ sequence_end }} stride=1 format=test%02u
+     azure_rm_virtualmachine:
+       resource_group: sakanatest
+       name: "{{ item }}"
+       state: absent
