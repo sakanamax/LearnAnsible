@@ -1,0 +1,15 @@
+---
+- name: test VM  with test tag in azure
+# host 這邊可以使用 azure 的群組, 或是 tag 來實驗
+  hosts: test
+#  connection: local
+  tasks:
+    - name: test hostname
+      shell: "hostname"
+
+- name: test all VM in azure
+  hosts: azure
+  tasks:
+    - name: test hostname
+      shell: "hostname"
+
