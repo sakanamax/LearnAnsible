@@ -20,6 +20,11 @@
       prompt: "Enter admin password"
       private: yes
 
+    - name: "vm_tags"
+      prompt: "Enter VM Tag, like test=01"
+      private: no
+
+      
     - name: "sequence_start"
       prompt: "Enter sequence start number"
       private: no
@@ -75,8 +80,8 @@
 # 這個 storage_account 是已經建立好的, 請對應到已經存在儲存體
 #       storage_account: sakanatestdiag34
        storage_account: sakanatestdiag340
-# tag 實驗 tag 好像會影響儲存體, 故另外開實驗
-#       tags: "{{ vm_tags }}"
+# tag 實驗
+       tags: "{{ vm_tags }}"
 
 
 # 經實驗 vm_size 是必須的
