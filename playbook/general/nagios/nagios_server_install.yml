@@ -33,7 +33,8 @@
   tasks:
     - name: Install nagios and nrpe with openSUSE Leap
 # 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
-      zypper: name={{ item }} disable_recommends=no
+# 這邊使用 disable_gpg_check=yes, 讓公有雲例如 azure上面的額外 repo 不用check gpg key
+      zypper: name={{ item }} disable_recommends=no disable_gpg_check=yes
       with_items:
         - nagios
         - monitoring-plugins
