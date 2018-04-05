@@ -36,6 +36,7 @@
         size_id: 2gb
         region_id: "{{ region_name }}"
         image_id: "{{ image_name }}"
+# 預設 digital ocean 允許同一個名字多個 droplets, 所以使用 unique_name 來告訴DO是要唯一一個
         unique_name: yes
         wait_timeout: 500
       register: my_droplet
