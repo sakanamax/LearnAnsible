@@ -1,0 +1,49 @@
+---
+# Digital Ocean 相關測試
+# edit by sakana 2018/4/5
+- name: use when conditional and setup module
+  hosts: localhost
+  connection: local
+
+#
+  vars_prompt:
+    - name: "api_token"
+      prompt: "Enter Digital Ocean API Token"
+      private: no
+
+    - name: "droplet_name"
+      prompt: "Enter Droplet's name"
+      private: no
+      default: test01
+
+    - name: "region_name"
+      prompt: "Enter region name"
+      private: no
+      default: sgp1
+
+    - name: "image_name"
+      prompt: "Enter image name"
+      private: no
+      default: ubuntu-16-04-x64
+
+  tasks:
+    - name: create digital ocean droplet
+      digital_ocean:
+        state: present
+        command: droplet
+        name: "{{ droplet_name }}"
+        api_token: "{{ api_token }}"
+        size_id: 2gb
+        region_id: "{{ region_name }}"
+        image_id: "{{ image_name }}"
+        unique_name: yes
+        wait_timeout: 500
+      register: my_droplet
+
+    - debug:
+        msg: "ID is {{ my_droplet.droplet.id }}"
+
+    - debug:
+        msg: "IP is {{ my_droplet.droplet.ip_address }}"
+
+

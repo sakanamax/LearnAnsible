@@ -1,0 +1,30 @@
+---
+# Digital Ocean 相關測試
+# edit by sakana 2018/4/5
+- name: use when conditional and setup module
+  hosts: localhost
+  connection: local
+
+#
+  vars_prompt:
+    - name: "api_token"
+      prompt: "Enter Digital Ocean API Token"
+      private: no
+
+    - name: "droplet_name"
+      prompt: "Enter Droplet's name"
+      private: no
+      default: test01
+
+
+  tasks:
+    - name: delete digital ocean droplet
+      digital_ocean:
+        state: absent
+        command: droplet
+        name: "{{ droplet_name }}"
+        api_token: "{{ api_token }}"
+        unique_name: yes
+        wait_timeout: 500
+
+

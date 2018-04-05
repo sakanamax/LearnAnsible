@@ -1,0 +1,51 @@
+---
+# Digital Ocean 相關測試
+# edit by sakana 2018/4/5
+- name: use when conditional and setup module
+  hosts: localhost
+  connection: local
+
+#
+  vars_prompt:
+    - name: "api_token"
+      prompt: "Enter Digital Ocean API Token"
+      private: no
+
+    - name: "sequence_start"
+      prompt: "Enter sequence start number"
+      private: no
+      default: 1
+
+    - name: "sequence_end"
+      prompt: "Enter sequence end number, Max is 99"
+      private: no
+      default: 10
+
+    - name: "region_name"
+      prompt: "Enter region name"
+      private: no
+      default: sgp1
+
+    - name: "image_name"
+      prompt: "Enter image name"
+      private: no
+      default: ubuntu-16-04-x64
+
+  tasks:
+    - name: create digital ocean droplet
+# 可以用 with_sequence 方式, %0x 為序號, x是16進制, 所以我用 u 10進制
+# 如果是 %02x 就是 2位數, 例如 server00
+# 如果只設定 server%0x , 但是超出1位數, 例如 1 to 10, 最後一個會變成 servera
+# stride=2 代表間隔是 2
+#      with_sequence: start=1 end=10 stride=1 format=server%02u
+      with_sequence: start={{ sequence_start }} end={{ sequence_end }} stride=1 format=test%02u
+      digital_ocean:
+        state: present
+        command: droplet
+        name: "{{ item }}"
+        api_token: "{{ api_token }}"
+        size_id: 2gb
+        region_id: "{{ region_name }}"
+        image_id: "{{ image_name }}"
+        unique_name: yes
+        wait_timeout: 500
