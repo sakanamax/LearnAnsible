@@ -1,0 +1,68 @@
+---
+#########################################################  
+# Install docker package and setup boot
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install python-pip and azure package
+# use group
+  hosts: AzureHost
+#  sudo: True
+  become: True
+  tasks:
+    - name: Install python-pip with openSUSE Leap
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
+# 這邊使用 disable_gpg_check=yes, 讓公有雲例如 azure上面的額外 repo 不用check gpg key
+      zypper: name={{ item }} disable_recommends=no disable_gpg_check=yes
+      with_items:
+        - python-pip
+        - curl
+        - wget
+        - sshpass
+      when: ansible_distribution == "openSUSE Leap"
+
+    - name: upgrade pip version
+      pip:
+        name: pip
+        state: latest 
+# 這邊透過 executable 來指定使用 pip2, 不然預設是 pip3
+        executable: pip2   
+
+    - name: install ansible[azure] with pip
+      pip:
+        name: ansible[azure]
+# 這邊透過 executable 來指定使用 pip2, 不然預設是 pip3
+        executable: pip2   
+
+# 下載 azure_rm.py, 以便日後 Dynamic Inventory 使用
+    - name: get azure_rm.py to root home
+      get_url:
+        url: https://raw.githubusercontent.com/ansible/ansible/devel/contrib/inventory/azure_rm.py
+        dest: /root/azure_rm.py
+        mode: 0551
+# 建立 ~/.azure 目錄
+    - name: create ~/.azure folder
+      file:
+        path: ~/.azure
+        state: directory
+# 建立 ~/.azure/credentials 檔案,之後要存放 azure 認證檔案
+    - name: create ~/.azure/credentials
+      file:
+        path: ~/.azure/credentials
+        state: touch
+
+#-------------------------------------------------------  
+
+
+
+
+
+
