@@ -5,3 +5,5 @@
   * -u 指令連線使用者
   * --ask-pass 詢問密碼
   * --ask-become-pass 詢問sudo 密碼
+
+針對 hosts 檔案內的群組[ AzureHost ]  進行相關套件安裝, 所以只要把主機加入該群組就好
