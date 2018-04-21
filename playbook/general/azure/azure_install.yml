@@ -29,6 +29,15 @@
         - sshpass
       when: ansible_distribution == "openSUSE Leap"
 
+    - name: Install python-pip with Ubuntu
+      apt: name={{ item }} update_cache=yes
+      with_items:
+        - python-pip
+        - curl
+        - wget
+        - sshpass
+      when: ansible_distribution == "Ubuntu"
+
     - name: upgrade pip version
       pip:
         name: pip
