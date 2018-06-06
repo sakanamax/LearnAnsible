@@ -36,17 +36,17 @@
       default: Basic_A1
 
     - name: "image_offer"
-      prompt: "Enter image offer"
+      prompt: "Enter image offer? openSUSE-Leap / UbuntuServer"
       private: no
       default: openSUSE-Leap
 
     - name: "image_publisher"
-      prompt: "Enter image publisher"
+      prompt: "Enter image publisher? SUSE / Canonical"
       private: no
       default: SUSE
 
     - name: "image_sku"
-      prompt: "Enter image sku"
+      prompt: "Enter image sku? 42.3 / 16.04-LTS"
       private: no
       default: 42.3
 
