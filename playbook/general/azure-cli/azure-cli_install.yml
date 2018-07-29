@@ -1,0 +1,59 @@
+---
+#########################################################  
+# 
+- name: use when conditionals and setup module (facts)
+  hosts: all
+  tasks:
+# 使用 setup moudule 列出 OS 種類
+    - name: use setup module to list os distribution
+# setup moudle 可以使用 filter 過濾相關內容
+      setup: filter=ansible_distribution
+
+
+#########################################################  
+
+- name: Install azure-cli package
+# 使用群組方式安裝 use group, 請配合 hosts 內的 [AzureCliHost]
+  hosts: AzureCliHost
+  become: True
+# 
+  tasks:
+    - name: Install curl
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
+# 這邊使用 disable_gpg_check=yes, 讓公有雲例如 azure上面的額外 repo 不用check gpg key
+      zypper: name={{ item }} disable_recommends=no disable_gpg_check=yes
+      with_items:
+        - curl
+      when: ansible_distribution == "openSUSE Leap"
+
+#-------------------------------------------------------
+
+# 匯入 rpm key
+    - name: Import RPM key
+      rpm_key:
+        state: present
+        key: https://packages.microsoft.com/keys/microsoft.asc
+
+ 
+#-------------------------------------------------------
+
+# 新增Azure Cli repo
+    - name: Add Azure-Cli repo
+      zypper_repository:
+        name: "azure-cli"
+        repo: 'https://packages.microsoft.com/yumrepos/azure-cli'
+
+
+#-------------------------------------------------------
+
+# 安裝 azure-cli
+    - name: Install azure-cli
+
+# 這邊使用 disable_recommends=no 加入zypper 建議的套件, 否則不會加入 apache2等其他套件
+# 這邊使用 disable_gpg_check=yes, 讓公有雲例如 azure上面的額外 repo 不用check gpg key
+      zypper: name={{ item }} disable_recommends=no disable_gpg_check=yes
+      with_items:
+        - azure-cli
+      when: ansible_distribution == "openSUSE Leap"
+
+
