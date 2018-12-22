@@ -46,9 +46,9 @@
       default: SUSE
 
     - name: "image_sku"
-      prompt: "Enter image sku? 42.3 / 16.04-LTS"
+      prompt: "Enter image sku? 15-0 / 16.04-LTS"
       private: no
-      default: 42.3
+      default: 15-0
 
     - name: "image_version"
       prompt: "Enter image version"
