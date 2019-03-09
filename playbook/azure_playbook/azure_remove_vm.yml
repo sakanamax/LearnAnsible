@@ -7,10 +7,16 @@
     - name: "vm_name"
       prompt: "Enter VM name your want to remove"
       private: no
+      default: test01
+
+    - name: "resource_group"
+      prompt: "Enter resource group name"
+      private: no
+      default: sakanatest
 
   tasks:
    - name: Remove Azure test VM
      azure_rm_virtualmachine:
-       resource_group: sakanatest
+       resource_group: "{{ resource_group }}"
        name: "{{ vm_name }}"
        state: absent

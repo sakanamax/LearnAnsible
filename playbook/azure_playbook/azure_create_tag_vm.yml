@@ -75,11 +75,11 @@
        admin_username: "{{ admin_username }}"
        admin_password: "{{ admin_password }}"
 # 這邊可以對應到已經有的儲存體
+# 如果沒有指定 storage_account, 每個VM 建立的時候會建立一個新的
 # 建立VM的時候會對應到儲存體, 如果只是實驗用, 可以對應到已經存在的儲存體
 # 好處是移除的時候不用再手動移除
 # 這個 storage_account 是已經建立好的, 請對應到已經存在儲存體
-#       storage_account: sakanatestdiag34
-       storage_account: sakanatestdiag340
+#       storage_account: sakanatestdiag340
 # tag 實驗
        tags: "{{ vm_tags }}"
 
