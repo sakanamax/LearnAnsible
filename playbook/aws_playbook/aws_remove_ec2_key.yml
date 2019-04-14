@@ -1,0 +1,39 @@
+---
+# AWS 相關測試
+# edit by sakana 2019/4/14
+# 官方建議的方式
+- hosts: localhost
+  connection: local
+  gather_facts: False
+#
+
+  vars_prompt:
+#要求使用者輸入 access key id 與 secret access key
+    - name: "aws_access_key_id"
+      prompt: "Enter aws_access_key_id"
+      private: no
+
+    - name: "aws_secret_access_key"
+      prompt: "Enter aws_secret_access_key"
+      private: no
+
+    - name: "aws_region"
+      prompt: "Enter AWS Region"
+      private: no
+      default: us-east-2
+
+#詢問 key name
+    - name: "ec2_key_name"
+      prompt: "Enter ec2 key name"
+      private: no
+
+
+  tasks:
+    - name: Create EC2 key pair
+      ec2_key:
+        aws_access_key: "{{ aws_access_key_id }}"
+        aws_secret_key: "{{ aws_secret_access_key }}"
+        name: "{{ ec2_key_name }}"
+        region: "{{ aws_region }}"
+        state: absent
+
