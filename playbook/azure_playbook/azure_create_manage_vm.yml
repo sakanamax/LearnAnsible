@@ -1,0 +1,99 @@
+---
+# Azure VM 相關測試
+# edit by sakana 2019/4/15
+- name: use when conditionals and setup module
+  hosts: localhost
+  connection: local
+#
+  vars_prompt:
+    - name: "resource_group"
+      prompt: "Enter resource group name"
+      private: no
+      default: sakanatest
+
+    - name: "admin_username"
+      prompt: "Enter admin username"
+      private: no
+      default: sakana
+
+    - name: "admin_password"
+      prompt: "Enter admin password"
+      private: yes
+
+    - name: "sequence_start"
+      prompt: "Enter sequence start number"
+      private: no
+      default: 1
+
+    - name: "sequence_end"
+      prompt: "Enter sequence end number, Max is 99"
+      private: no
+      default: 10
+
+    - name: "vm_size"
+      prompt: "Enter VM size"
+      private: no
+      default: Basic_A1
+
+    - name: "image_offer"
+      prompt: "Enter image offer? openSUSE-Leap / UbuntuServer"
+      private: no
+      default: openSUSE-Leap
+
+    - name: "image_publisher"
+      prompt: "Enter image publisher? SUSE / Canonical"
+      private: no
+      default: SUSE
+
+    - name: "image_sku"
+      prompt: "Enter image sku? 15-0 / 16.04-LTS"
+      private: no
+      default: 15-0
+
+    - name: "image_version"
+      prompt: "Enter image version"
+      private: no
+      default: latest
+
+    - name: "managed_disk_type"
+      prompt: "Enter managed disk type"
+      private: no
+      default: Standard_LRS
+
+  tasks:
+   - name: Create Azure test VM
+# 可以用 with_sequence 方式, %0x 為序號, x是16進制, 所以我用 u 10進制
+# 如果是 %02x 就是 2位數, 例如 server00
+# 如果只設定 server%0x , 但是超出1位數, 例如 1 to 10, 最後一個會變成 servera
+# stride=2 代表間隔是 2
+#      with_sequence: start=1 end=10 stride=1 format=server%02u
+     with_sequence: start={{ sequence_start }} end={{ sequence_end }} stride=1 format=test%02u
+     azure_rm_virtualmachine:
+       resource_group: "{{ resource_group }}"
+# 這邊的 "{{ item }}" 對應到上面的 with_sequence
+       name: "{{ item }}"
+       admin_username: "{{ admin_username }}"
+       admin_password: "{{ admin_password }}"
+#設定受控磁碟類型
+       managed_disk_type: "{{ managed_disk_type }}"
+# 這邊可以對應到已經有的儲存體
+# 如果沒有指定 storage_account 就是每個 VM 會建立一個新的
+# 建立VM的時候會對應到儲存體, 如果只是實驗用, 可以對應到已經存在的儲存體
+# 好處是移除的時候不用再手動移除
+# 這個 storage_account 是已經建立好的, 請對應到已經存在儲存體
+#       storage_account: sakanatestdiag340
+#
+# tag 實驗 tag 好像會影響儲存體, 故另外開實驗
+#       tags: "{{ vm_tags }}"
+
+
+# 經實驗 vm_size 是必須的
+       vm_size: "{{ vm_size }}"
+#
+# image 相關資訊可以使用 az vm image list --output table 查詢
+       image:
+         offer: "{{ image_offer }}"
+         publisher: "{{ image_publisher }}"
+         sku: "{{ image_sku }}"
+         version: "{{ image_version }}"
+#
