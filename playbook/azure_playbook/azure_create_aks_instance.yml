@@ -1,0 +1,77 @@
+---
+# Azure AKS 相關測試
+# edit by sakana 2019/5/9
+- name: use when conditionals and setup module
+  hosts: localhost
+  connection: local
+#
+  vars_prompt:
+    - name: "client_id"
+      prompt: "Enter client_id"
+      private: no
+
+    - name: "client_secret"
+      prompt: "Enter client_secret"
+      private: no
+
+    - name: "resource_group"
+      prompt: "Enter resource group name"
+      private: no
+      default: sakanaK8s
+
+    - name: "aks_instance_name"
+      prompt: "Enter aks instance name"
+      private: no
+      default: test01
+
+    - name: "aks_location"
+      prompt: "Enter aks location"
+      private: no
+      default: eastus
+
+    - name: "dns_prefix"
+      prompt: "Enter aks dns_prefix"
+      private: no
+      default: sakanamax
+
+    - name: "admin_username"
+      prompt: "Enter admin user's name"
+      private: no
+      default: sakana
+
+    - name: "aks_ssh_key"
+      prompt: "Enter aks ssh public key"
+      private: no
+
+    - name: "aks_pool_name"
+      prompt: "Enter aks pool name"
+      private: no
+      default: testsakana 
+
+    - name: "aks_count"
+      prompt: "Enter how many node do you want to create?"
+      private: no
+      default: 1
+
+    - name: "vm_size"
+      prompt: "Enter vm size for each node"
+      private: no
+      default: Standard_B2s
+
+  tasks:
+   - name: Create AKS instance
+     azure_rm_aks:
+       name: "{{ aks_instance_name }}"
+       resource_group: "{{ resource_group }}"
+       dns_prefix: "{{ dns_prefix }}"
+       linux_profile:
+         admin_username: "{{ admin_username }}"
+         ssh_key: "{{ aks_ssh_key }}"
+       service_principal:
+         client_id:     "{{ client_id }}"
+         client_secret: "{{ client_secret }}"
+       agent_pool_profiles:
+         - name: "{{ aks_pool_name }}"
+           count: "{{ aks_count }}"
+           vm_size: "{{ vm_size }}"
+#

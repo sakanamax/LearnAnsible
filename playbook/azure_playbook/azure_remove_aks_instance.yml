@@ -1,0 +1,25 @@
+---
+# Azure AKS 相關測試
+# edit by sakana 2019/5/9
+- name: use when conditionals and setup module
+  hosts: localhost
+  connection: local
+#
+  vars_prompt:
+    - name: "aks_instance_name"
+      prompt: "Enter aks instance name you want to REMOVE"
+      private: no
+      default: test01
+
+    - name: "resource_group"
+      prompt: "Enter resource group name"
+      private: no
+      default: sakanaK8s
+
+  tasks:
+   - name: Remove AKS instance
+     azure_rm_aks:
+       name: "{{ aks_instance_name }}"
+       resource_group: "{{ resource_group }}"
+       state: absent
+#
