@@ -1,0 +1,97 @@
+---
+# edit by sakana 2019/5/12
+#########################################################  
+# 
+#
+#########################################################  
+
+- name: Install docker and run service
+# use group
+  hosts: gitlab
+#  sudo: True
+  become: True
+  vars_prompt:
+    - name: "hostname"
+      prompt: "Enter gitlab hostname, ex: gitlab.example.com"
+      private: no
+      default: gitlab.example.com
+
+    - name: "container_name"
+      prompt: "Enter container name when we create, ex: gitlab"
+      private: no
+      default: gitlab
+
+  tasks:
+#    - name: test setup moudule
+#      setup: filter=ansible_distribution
+
+    - name: Install docker with openSUSE Leap
+      zypper: 
+        name:
+          - docker
+          - curl
+      when: ansible_distribution == "openSUSE Leap"
+
+# 舊的方式 with_item 即將被棄用
+#    - name: Install docker with openSUSE Leap
+#      zypper: name={{ item }}
+#      with_items:
+#        - docker
+#        - curl
+#      when: ansible_distribution == "openSUSE Leap"
+
+#######################################################
+# 等到 openSUSE 測試完成再來測試 CentOS and Ubuntu 
+#
+#    - name: Install docker with CentOS
+#      yum: name={{ item }}
+#      with_items:
+#        - docker
+#        - curl
+#      when: ansible_distribution == "CentOS"
+
+#    - name: Install docker with Ubuntu
+#      apt: name={{ item }} update_cache=yes
+#      with_items:
+#        - docker.io
+#        - curl
+#      when: ansible_distribution == "Ubuntu"
+
+   
+#    - name: Create docker link with Ubuntu
+#      shell: ln -sf /usr/bin/docker.io /usr/local/bin/docker
+#      when: ansible_distribution == "Ubuntu"
+#
+######################################################
+
+
+#-------------------------------------------------------  
+
+    - name: Set docker enable and run
+      service: name=docker state=started enabled=yes
+
+#-------------------------------------------------------  
+
+# 使用 parted 建立label
+    - name: use parted to make label
+      shell: parted /dev/sdc mklabel msdos
+# 使用 parted 建立分割區, 要使用百分比的方式才能非互動
+    - name: use parted create partition
+      shell: parted /dev/sdc mkpart primary 0% 100%
+# 建立 file system
+    - name: use mkfs.xfs create file system
+      shell: mkfs.xfs -f /dev/sdc1
+# 使用 mount module 掛載, 寫入 /etc/fstab
+    - name: mount /dev/sdc1 to /gitlab
+      mount:
+        path: /gitlab
+        src: /dev/sdc1
+        fstype: xfs
+        state: mounted
+
+#-------------------------------------------------------  
+
+    - name: use docker command to run
+      shell: docker run -d --hostname {{ hostname }} -p 443:443 -p 80:80 --name {{ container_name }} --restart always gitlab/gitlab-ce:latest
+
+#-------------------------------------------------------  
