@@ -1,0 +1,54 @@
+---
+# edit by sakana 2019/7/18
+# 感謝亦德提供安裝的playbook 讓我修改
+#########################################################  
+# 
+#
+#########################################################  
+
+- name: Install netdata and run service
+# use group
+  hosts: netdata
+#  sudo: True
+  become: True
+
+  tasks:
+#    - name: test setup moudule
+#      setup: filter=ansible_distribution
+
+# 下載 netdata 安裝 script
+    - name: downlaod netdata software
+      get_url:
+        url: https://my-netdata.io/kickstart.sh
+        dest: /usr/local/src/
+
+# 使用非互動的方式安裝 netdata
+    - name: install netdata
+      shell: bash /usr/local/src/kickstart.sh --dont-wait
+
+    - name: clean yum cache
+      shell: yum clean all
+      args:
+        warn: no
+
+# 移除 kickstart.sh
+    - name: remove netdata software
+      shell: rm -rf /usr/local/src/kickstart.sh
+      args:
+        warn: no
+
+# 修改 Global 的 history 為86400
+    - name: change netdata.conf
+      shell: sed -i '1,30s/# history = 3996/history = 86400/g' /etc/netdata/netdata.conf
+      args:
+        warn: no
+
+# 重新啟動 netdata
+    - name: restart and enable service netdata
+      systemd:
+        name: netdata
+        state: restarted
+        enabled: yes
+
+
+#-------------------------------------------------------  
