@@ -1,0 +1,89 @@
+---
+# AWS 相關測試
+# edit by sakana 2019/8/3
+#
+# 官方建議的方式
+- hosts: localhost
+  connection: local
+  gather_facts: False
+#
+
+  vars_prompt:
+#要求使用者輸入 access key id 與 secret access key
+    - name: "aws_access_key_id"
+      prompt: "Enter aws_access_key_id"
+      private: no
+
+    - name: "aws_secret_access_key"
+      prompt: "Enter aws_secret_access_key"
+      private: no
+
+    - name: "aws_region"
+      prompt: "Enter AWS Region"
+      private: no
+      default: us-east-2
+
+#詢問 key name
+    - name: "ec2_key_name"
+      prompt: "Enter ec2 key name"
+      private: no
+      default: test-key
+
+#詢問機器類型
+    - name: "instance_type"
+      prompt: "Enter instance type"
+      private: no
+      default: t2.micro
+
+#
+    - name: "image_id"
+      prompt: "Enter image id, like ami-xxxx"
+      private: no
+      default: ami-026fef571e7830801
+
+#
+    - name: "security_group_name"
+      prompt: "Enter security group name, example: ssh or ['ssh', 'default']  "
+      private: no
+      default: default
+
+#
+    - name: "vpc_subnet_id"
+      prompt: "Enter vpc subnet-id"
+      private: no
+      default: subnet-93dfe4fb
+
+#
+    - name: "instance_number"
+      prompt: "Enter how many instance do you want to create"
+      private: no
+      default: 1
+
+#
+    - name: "assign_public_ip"
+      prompt: "Do you want to assign public ip?"
+      private: no
+      default: yes
+
+#
+    - name: "instance_tags_value"
+      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Project":"test"}  "'
+      private: no
+      default: {"Env":"Lab"}
+
+  tasks:
+    - name: Create EC2
+      ec2:
+        aws_access_key: "{{ aws_access_key_id }}"
+        aws_secret_key: "{{ aws_secret_access_key }}"
+        key_name: "{{ ec2_key_name }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ image_id }}"
+        wait: yes
+        group: "{{ security_group_name }}"
+        count: "{{ instance_number }}"
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
+        region: "{{ aws_region }}"
+        assign_public_ip: "{{ assign_public_ip }}"
+        instance_tags: "{{ instance_tags_value }}"
+

@@ -1,0 +1,40 @@
+---
+# AWS 相關測試
+# edit by sakana 2019/8/3
+#
+# 官方建議的方式
+- hosts: localhost
+  connection: local
+  gather_facts: False
+#
+
+  vars_prompt:
+#要求使用者輸入 access key id 與 secret access key
+    - name: "aws_access_key_id"
+      prompt: "Enter aws_access_key_id"
+      private: no
+
+    - name: "aws_secret_access_key"
+      prompt: "Enter aws_secret_access_key"
+      private: no
+
+    - name: "aws_region"
+      prompt: "Enter AWS Region"
+      private: no
+      default: us-east-2
+
+    - name: "instance_tags_value"
+      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Project":"test"}  "'
+      private: no
+      default: {"Env":"Lab"}
+
+
+  tasks:
+    - name: Create EC2
+      ec2:
+        aws_access_key: "{{ aws_access_key_id }}"
+        aws_secret_key: "{{ aws_secret_access_key }}"
+        region: "{{ aws_region }}"
+        instance_tags: "{{ instance_tags_value }}"
+        state: running
+
