@@ -1,4 +1,4 @@
-edit by sakana 2019/7/18
+edit by sakana 2020/1/4
 
 感謝奕德提供playbook 讓我修改
 
@@ -18,7 +18,9 @@ edit by sakana 2019/7/18
 
 針對 hosts 檔案內的群組[ netdata ]  進行相關套件安裝, 所以只要把主機加入該群組就好
 
-作法上可能就是用以下指令就可以安裝
+
+
+作法上可能就是用以下指令就可以安裝 (GCP 來說)
 # ansible-playbook -u  sakana  netdata_install.yml 
 
 firewall 或是 security group 要另外開
