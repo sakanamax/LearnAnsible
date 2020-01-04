@@ -1,10 +1,11 @@
 ---
-# edit by sakana 2019/7/18
+#
+# edit by sakana 2020/1/4
 # 感謝亦德提供安裝的playbook 讓我修改
 #########################################################  
-# 
+# 目前在 CentOS 7 上面測試過
+# 之後待修正套用 Ubuntu 與 openSUSE
 #
-#########################################################  
 
 - name: Install netdata and run service
 # use group
@@ -26,6 +27,7 @@
     - name: install netdata
       shell: bash /usr/local/src/kickstart.sh --dont-wait
 
+# 這邊之後可能要改, 因為要配合不同 OS, 例如 Ubuntu, openSUSE
     - name: clean yum cache
       shell: yum clean all
       args:
