@@ -55,6 +55,7 @@
       private: no
       default: latest
 
+   
   tasks:
    - name: Create Azure test VM
 # 可以用 with_sequence 方式, %0x 為序號, x是16進制, 所以我用 u 10進制
@@ -79,6 +80,7 @@
 # tag 實驗 tag 好像會影響儲存體, 故另外開實驗
 #       tags: "{{ vm_tags }}"
 
+# VM 的位置, location 可以經由 az account list-locations -o table 查詢
 
 # 經實驗 vm_size 是必須的
        vm_size: "{{ vm_size }}"
