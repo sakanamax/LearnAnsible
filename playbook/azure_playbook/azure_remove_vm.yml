@@ -1,6 +1,6 @@
 ---
 # Azure VM 相關測試
-# edit by sakan 2018/2/17
+# edit by sakan 2020/4/4
 - name: use when conditionals and setup module
   hosts: localhost
   vars_prompt:
@@ -12,7 +12,7 @@
     - name: "resource_group"
       prompt: "Enter resource group name"
       private: no
-      default: sakanatest
+      default: sakanastudy
 
   tasks:
    - name: Remove Azure test VM
