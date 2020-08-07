@@ -1,6 +1,6 @@
 ---
 # AWS 相關測試
-# edit by sakana 2019/8/3
+# edit by sakana 2020/8/1
 #
 # 官方建議的方式
 - hosts: localhost
@@ -39,7 +39,8 @@
     - name: "image_id"
       prompt: "Enter image id, like ami-xxxx"
       private: no
-      default: ami-026fef571e7830801
+# 將 default 改為 Leap 15.2    15.1 default: ami-026fef571e7830801
+      default: ami-0972e743883d7193e
 
 #
     - name: "security_group_name"
