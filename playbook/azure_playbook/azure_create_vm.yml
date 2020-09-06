@@ -1,6 +1,6 @@
 ---
 # Azure VM 相關測試
-# edit by sakana 2018/2/17
+# edit by sakana 2020/9/6
 - name: use when conditionals and setup module
   hosts: localhost
   connection: local
@@ -46,9 +46,9 @@
       default: SUSE
 
     - name: "image_sku"
-      prompt: "Enter image sku? 15-1 / 16.04-LTS"
+      prompt: "Enter image sku? 15-2 / 16.04-LTS"
       private: no
-      default: 15-1
+      default: 15-2
 
     - name: "image_version"
       prompt: "Enter image version"
@@ -86,6 +86,7 @@
        vm_size: "{{ vm_size }}"
 #
 # image 相關資訊可以使用 az vm image list --output table 查詢
+# 如果是查 openSUSE image 的 sku, 可以用 az vm image list --offer SUSE --all 來查看
        image:
          offer: "{{ image_offer }}"
          publisher: "{{ image_publisher }}"
