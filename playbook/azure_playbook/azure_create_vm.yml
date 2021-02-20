@@ -31,7 +31,7 @@
       default: 10
 
     - name: "vm_size"
-      prompt: "Enter VM size"
+      prompt: "Enter VM size, Basic_A1 or Standard_B1s maybe good choice"
       private: no
       default: Basic_A1
 
