@@ -1,6 +1,6 @@
 ---
 # Azure VM 相關測試
-# edit by sakana 2020/9/6
+# edit by sakana 2021/2/20
 - name: use when conditionals and setup module
   hosts: localhost
   connection: local
@@ -83,6 +83,7 @@
 # VM 的位置, location 可以經由 az account list-locations -o table 查詢
 
 # 經實驗 vm_size 是必須的
+# 可以使用 az vm list-sizes --location xxxxx -o table 來觀察 size
        vm_size: "{{ vm_size }}"
 #
 # image 相關資訊可以使用 az vm image list --output table 查詢
