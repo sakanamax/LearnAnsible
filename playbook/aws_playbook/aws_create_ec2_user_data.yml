@@ -1,7 +1,8 @@
 ---
 # AWS 相關測試
-# edit by sakana 2019/8/3
-#
+# edit by sakana 2021/3/11
+# 建立 EC2 使用 user_data 並加上 Tag
+# 
 # 官方建議的方式
 - hosts: localhost
   connection: local
@@ -11,49 +12,64 @@
   vars_prompt:
 #要求使用者輸入 access key id 與 secret access key
     - name: "aws_access_key_id"
-      prompt: "Enter aws_access_key_id"
+      prompt: "請輸入要執行的 AWS Access Key ID / Enter aws_access_key_id"
       private: no
 
     - name: "aws_secret_access_key"
-      prompt: "Enter aws_secret_access_key"
+      prompt: "請輸入要執行的 AWS Secret Access Key / Enter aws_secret_access_key"
       private: no
 
     - name: "aws_region"
-      prompt: "Enter AWS Region"
+      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region: us-east-2 / ap-northeast-1"
       private: no
+# us-east-2 爲 Ohio / ap-northeast-1 為 Tokyo
       default: us-east-2
 
 #詢問 key name
     - name: "ec2_key_name"
       prompt: "Enter ec2 key name"
+# key name 查詢方式 (region 與 profile 請換成自己的), 參考 https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html
+# > aws ec2 describe-key-pairs --query 'KeyPairs[].[KeyPairId, KeyName]' --output text --region ap-northeast-1  --profile sakana
+# 
       private: no
       default: test-key
 
 #詢問機器類型
     - name: "instance_type"
-      prompt: "Enter instance type"
+      prompt: "Enter instance type: t2.micro (for x86), t4g.micro (for ARM)"
       private: no
-      default: t2.micro
+      default: t4g.micro
 
 #
     - name: "image_id"
-      prompt: "Enter image id, like ami-xxxx"
+      prompt: "Enter image id, like ami-xxxx, Amazon Linux 2 - ami-0661694c01306dbc9 (64-bit Arm) / ami-09d28faae2e9e7138 (64-bit x86)"
       private: no
-      default: ami-026fef571e7830801
+# Amazon Linux 2 AMI (HVM), SSD Volume Type 
+# ami-09d28faae2e9e7138 (64-bit x86)
+# ami-0661694c01306dbc9 (64-bit Arm)
+      default: ami-0661694c01306dbc9
 
-#
+# 詢問 security group
     - name: "security_group_name"
       prompt: "Enter security group name, example: ssh or ['ssh', 'default']  "
       private: no
+# security group 查詢方式(region 與 profile 請換成自己的), 參考 https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html
+#
+# > aws ec2 describe-security-groups --query 'SecurityGroups[].[GroupName, IpPermissions[].FromPort, Tags]' --output yaml --region ap-northeast-1  --profile sakana 
+#
       default: default
 
-#
+# 詢問 vpc subnet id
     - name: "vpc_subnet_id"
       prompt: "Enter vpc subnet-id"
       private: no
+# subnetId 查詢方式 (region 與 profile 請換成自己的), 參考 https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-filter.html
+#
+# > aws ec2 describe-subnets --query 'Subnets[*].[AvailabilityZone, CidrBlock, SubnetId, Tags]' --output text --region ap-northeast-1 --profile sakana
+# 
       default: subnet-93dfe4fb
 
-#
+# 詢問要建立的數量
     - name: "instance_number"
       prompt: "Enter how many instance do you want to create"
       private: no
@@ -65,14 +81,20 @@
       private: no
       default: yes
 
-#
+# 設定 user_data 相關設定
     - name: "user_data_name"
-      prompt: "Enter user_data file name in AWS/user-data/"
+      prompt: "Enter user_data file name in /root/momo/AWS/user-data/"
       private: no
       default: default_userdata
 
+# 設定 Tag
+    - name: "instance_tags_value"
+      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Name":"maxtest"}  "'
+      private: no
+      default: {"Env":"Lab","Name":"maxtest"}
+
   tasks:
-    - name: Create EC2
+    - name: Create EC2 with user_data and Tag
       ec2:
         aws_access_key: "{{ aws_access_key_id }}"
         aws_secret_key: "{{ aws_secret_access_key }}"
@@ -85,5 +107,5 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         region: "{{ aws_region }}"
         assign_public_ip: "{{ assign_public_ip }}"
-        user_data: "{{ lookup('file', '/root/momo-css-work/AWS/user-data/{{user_data_name}}' ) }}"
-
+        user_data: "{{ lookup('file', '/root/momo/momo-css-work/AWS/user-data/{{user_data_name}}' ) }}"
+        instance_tags: "{{ instance_tags_value }}"

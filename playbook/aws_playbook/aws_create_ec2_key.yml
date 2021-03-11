@@ -1,6 +1,8 @@
 ---
 # AWS 相關測試
-# edit by sakana 2020/5/31
+# edit by sakana 2021/3/11
+# 建立 EC2 Key Pair
+#
 # 官方建議的方式
 - hosts: localhost
   connection: local
@@ -18,8 +20,9 @@
       private: no
 
     - name: "aws_region"
-      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region"
+      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region: us-east-2 / ap-northeast-1"
       private: no
+# us-east-2 爲 Ohio / ap-northeast-1 為 Tokyo
       default: us-east-2
 
 #詢問 key name
