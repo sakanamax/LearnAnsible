@@ -1,6 +1,7 @@
 ---
 # AWS 相關測試
-# edit by sakana 2019/8/3
+# edit by sakana 2021/3/14
+# 刪除 EC2 Key Pair
 #
 # 官方建議的方式
 - hosts: localhost
@@ -19,22 +20,24 @@
       private: no
 
     - name: "aws_region"
-      prompt: "Enter AWS Region"
+      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region: us-east-2 / ap-northeast-1"
       private: no
+# us-east-2 爲 Ohio / ap-northeast-1 為 Tokyo
       default: us-east-2
 
-    - name: "instance_tags_value"
-      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Project":"test"}  "'
+#詢問 key name
+    - name: "ec2_key_name"
+      prompt: "請輸入要建立的 EC2 Key 名稱 / Enter ec2 key name: "
       private: no
-      default: {"Env":"Lab"}
+      default: test-key-can-delete
 
 
   tasks:
-    - name: Create EC2
-      ec2:
+    - name: Remove EC2 key pair
+      ec2_key:
         aws_access_key: "{{ aws_access_key_id }}"
         aws_secret_key: "{{ aws_secret_access_key }}"
+        name: "{{ ec2_key_name }}"
         region: "{{ aws_region }}"
-        instance_tags: "{{ instance_tags_value }}"
-        state: running
+        state: absent
 

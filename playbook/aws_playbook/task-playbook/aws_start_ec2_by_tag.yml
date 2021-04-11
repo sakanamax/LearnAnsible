@@ -1,6 +1,8 @@
 ---
 # AWS 相關測試
-# edit by sakana 2019/4/14
+# edit by sakana 2021/3/14
+# 根據 Tag 啟動 EC2
+#
 # 官方建議的方式
 - hosts: localhost
   connection: local
@@ -18,22 +20,24 @@
       private: no
 
     - name: "aws_region"
-      prompt: "Enter AWS Region"
+      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region: us-east-2 / ap-northeast-1"
       private: no
+# us-east-2 爲 Ohio / ap-northeast-1 為 Tokyo
       default: us-east-2
 
-#詢問 key name
-    - name: "ec2_key_name"
-      prompt: "Enter ec2 key name"
+# 設定 Tag
+    - name: "instance_tags_value"
+      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Name":"maxtest"}  "'
       private: no
+      default: {"Env":"Lab","Name":"maxtest"}
 
 
   tasks:
-    - name: Create EC2 key pair
-      ec2_key:
+    - name: Start EC2 by Tag
+      ec2:
         aws_access_key: "{{ aws_access_key_id }}"
         aws_secret_key: "{{ aws_secret_access_key }}"
-        name: "{{ ec2_key_name }}"
         region: "{{ aws_region }}"
-        state: absent
+        instance_tags: "{{ instance_tags_value }}"
+        state: running
 

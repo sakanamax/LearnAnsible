@@ -1,6 +1,6 @@
 ---
 # AWS 相關測試
-# edit by sakana 2021/3/11
+# edit by sakana 2021/3/14
 # 建立 EC2 Key Pair
 #
 # 官方建議的方式
@@ -27,8 +27,9 @@
 
 #詢問 key name
     - name: "ec2_key_name"
-      prompt: "==如果是在容器環境執行可以使用 docker cp 複製出來== \n 請輸入要建立的 EC2 Key 名稱, 建立完成會存放在家目錄 / Enter ec2 key name, it will save to home directory"
+      prompt: "\n ==如果是在容器環境執行可以使用 docker cp 複製出來== \n 請輸入要建立的 EC2 Key 名稱, 建立完成會存放在家目錄 / Enter ec2 key name, it will save to home directory"
       private: no
+      default: test-key-can-delete
 
 
   tasks:

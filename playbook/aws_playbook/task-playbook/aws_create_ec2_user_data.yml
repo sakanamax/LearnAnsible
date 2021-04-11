@@ -1,6 +1,6 @@
 ---
 # AWS 相關測試
-# edit by sakana 2021/3/11
+# edit by sakana 2021/3/26
 # 建立 EC2 使用 user_data 並加上 Tag
 # 
 # 官方建議的方式
@@ -83,9 +83,9 @@
 
 # 設定 user_data 相關設定
     - name: "user_data_name"
-      prompt: "Enter user_data file name in /root/momo/AWS/user-data/"
+      prompt: "Enter user_data file path and name: "
       private: no
-      default: default_userdata
+      default: "~/momo/momo-css-work/AWS/user-data/default_userdata"
 
 # 設定 Tag
     - name: "instance_tags_value"
@@ -107,5 +107,5 @@
         vpc_subnet_id: "{{ vpc_subnet_id }}"
         region: "{{ aws_region }}"
         assign_public_ip: "{{ assign_public_ip }}"
-        user_data: "{{ lookup('file', '/root/momo/momo-css-work/AWS/user-data/{{user_data_name}}' ) }}"
+        user_data: "{{ lookup('file', '{{user_data_name}}' ) }}"
         instance_tags: "{{ instance_tags_value }}"

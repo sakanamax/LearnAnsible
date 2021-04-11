@@ -1,6 +1,7 @@
 ---
 # AWS 相關測試
-# edit by sakana 2019/8/3
+# edit by sakana 2021/3/14
+# 根據 Tag 停止 EC2
 #
 # 官方建議的方式
 - hosts: localhost
@@ -19,18 +20,20 @@
       private: no
 
     - name: "aws_region"
-      prompt: "Enter AWS Region"
+      prompt: "請輸入 要執行的 AWS Region / Enter AWS Region: us-east-2 / ap-northeast-1"
       private: no
+# us-east-2 爲 Ohio / ap-northeast-1 為 Tokyo
       default: us-east-2
 
+# 設定 Tag
     - name: "instance_tags_value"
-      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Project":"test"}  "'
+      prompt: '"Enter the tag name and value. example: {"Env":"Lab"} or {"Env":"Lab","Name":"maxtest"}  "'
       private: no
-      default: {"Env":"Lab"}
+      default: {"Env":"Lab","Name":"maxtest"}
 
 
   tasks:
-    - name: Create EC2
+    - name: Stop EC2 by Tag
       ec2:
         aws_access_key: "{{ aws_access_key_id }}"
         aws_secret_key: "{{ aws_secret_access_key }}"
