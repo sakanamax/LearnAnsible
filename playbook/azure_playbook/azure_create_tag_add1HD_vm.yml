@@ -1,6 +1,6 @@
 ---
 # Azure VM 相關測試
-# edit by sakana 2019/5/12
+# edit by sakana 2021/8/7
 - name: use when conditionals and setup module
   hosts: localhost
   connection: local
@@ -40,9 +40,9 @@
       default: Standard_B2ms
 
     - name: "image_offer"
-      prompt: "Enter image offer? openSUSE-Leap / UbuntuServer"
+      prompt: "Enter image offer? opensuse-leap-15-3 / openSUSE-Leap / UbuntuServer"
       private: no
-      default: openSUSE-Leap
+      default: opensuse-leap-15-3
 
     - name: "image_publisher"
       prompt: "Enter image publisher? SUSE / Canonical"
@@ -50,9 +50,9 @@
       default: SUSE
 
     - name: "image_sku"
-      prompt: "Enter image sku? 15-1 / 16.04-LTS"
+      prompt: "Enter image sku? gen1 / 15-2 / 16.04-LTS"
       private: no
-      default: 15-1
+      default: gen1
 
     - name: "image_version"
       prompt: "Enter image version"
