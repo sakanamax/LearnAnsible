@@ -13,5 +13,5 @@ requests==2.20.0
 six==1.5.2
 ssh-import-id==3.21
 urllib3==1.26.5
-wheel==0.24.0
+wheel==0.38.1
 wsgiref==0.1.2
