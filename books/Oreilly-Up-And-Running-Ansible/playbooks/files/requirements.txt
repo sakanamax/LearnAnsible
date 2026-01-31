@@ -12,6 +12,6 @@ python-apt==0.9.3.5
 requests==2.32.4
 six==1.5.2
 ssh-import-id==3.21
-urllib3==1.26.5
+urllib3==2.6.3
 wheel==0.38.1
 wsgiref==0.1.2
